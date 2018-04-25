@@ -1,44 +1,67 @@
-let runner;
-let runner2;
+let burger;
+let person;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  runner = new Runner(100,100);
-  runner2 = new Runner(200,200);
+  burger = new Burger(width/2, 100);
+  person = new Person();
 }
 
 function draw() {
-  runner.move();
-  runner2.move();
-  runner.display();
-  runner2.display();
+  burger.display();
+  burger.keyPressed();
 }
 
-class Runner {
-  constructor(x,y,r = 255,g = 0,b = 0){
+class Burger {
+  constructor(x,y){
     this.x = x;
     this.y = y;
-    this.w = 100;
-    this.h = 100;
-    this.color = color(r,g,b);
+    this.w = 50;
+    this.h = 50;
   }
   display(){
-    let choice = random(100);
-    if(choice > 25){
-      this.x + 5;
-    }
-    else if(choice < 25){
-      this.x - 5;
-    }
-    else if(choice < 75){
-      this.y + 5;
-    }
-    else{
-      this.y - 5;
-    }
-  }
-
-  move(){
     ellipse(this.x,this.y,this.w,this.h);
   }
+  keyPressed(){
+    if (key === "w" || key === "W") {
+      this.x - 5;
+    }
+    if (key === "s" || key === "S") {
+      this.x + 5;
+    }
+    if (key === "a" || key === "A") {
+      this.y - 5;
+    }
+    if (key === "d" || key === "D") {
+      this.y + 5;
+    }
+  }
 }
+
+class Person{
+  constructor(x,y){
+
+  }
+}
+function keyPressed(){
+  if (key === "w" || key === "W") {
+    this.x - 5;
+  }
+  if (key === "s" || key === "S") {
+    this.x + 5;
+  }
+  if (key === "a" || key === "A") {
+    this.y - 5;
+  }
+  if (key === "d" || key === "D") {
+    this.y + 5;
+  }
+}
+// needs
+// burger movement
+// randomized food spawn
+// food - burger interaction
+// burger inventory array
+// burger disposable
+// person to burger interaction
+// timer / countdown
