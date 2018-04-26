@@ -1,18 +1,16 @@
 let burger;
 let person;
-let burgerX, burgerY;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
-  burgerX = width / 2;
-  burgerY = 100;
-  burger = new Burger(burgerX, burgerY, 100, 100);
+  burger = new Burger(width/2, 100, 100, 100);
   person = new Person();
 }
 
 function draw() {
   burger.display();
+  burger.movement();
 }
 
 class Burger {
@@ -27,30 +25,25 @@ class Burger {
     ellipse(this.x, this.y, this.w, this.h);
   }
 
-  moveLeft(amount) {
-    this.x -= amount;
+  movement() {
+    if (keyIsDown(UP_ARROW)) {
+      this.y -= 20;
+    }
+    if (keyIsDown(DOWN_ARROW)) {
+      this.y += 20;
+    }
+    if (keyIsDown(LEFT_ARROW)) {
+      this.x -= 20;
+    }
+    if (keyIsDown(UP_ARROW)) {
+      this.x += 20;
+    }
   }
-
 }
 
 class Person {
   constructor(x, y) {
 
-  }
-}
-
-function keyPressed() {
-  if (key === "w" || key === "W") {
-    burgerY = burgerY - 50;
-  }
-  if (key === "s" || key === "S") {
-    burgerY = burgerY + 50;
-  }
-  if (key === "a" || key === "A") {
-    burger.moveLeft(50);
-  }
-  if (key === "d" || key === "D") {
-    burgerX = burgerX + 50;
   }
 }
 
