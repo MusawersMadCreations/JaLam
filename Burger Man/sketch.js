@@ -22,21 +22,22 @@ class Burger {
   }
 
   display() {
+    background("white");
     ellipse(this.x, this.y, this.w, this.h);
   }
 
   movement() {
     if (keyIsDown(UP_ARROW)) {
-      this.y -= 20;
+      this.y -= 2;
     }
     if (keyIsDown(DOWN_ARROW)) {
-      this.y += 20;
+      this.y += 2;
     }
     if (keyIsDown(LEFT_ARROW)) {
-      this.x -= 20;
+      this.x -= 2;
     }
-    if (keyIsDown(UP_ARROW)) {
-      this.x += 20;
+    if (keyIsDown(RIGHT_ARROW)) {
+      this.x += 2;
     }
   }
 }
