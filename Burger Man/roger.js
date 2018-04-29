@@ -4,7 +4,7 @@ let person;
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
-  burger = new Burger(width/2, 100, 100, 100);
+  burger = new Burger(width/2, 100, 100, 100, 3);
   person = new Person();
 }
 
@@ -14,11 +14,12 @@ function draw() {
 }
 
 class Burger {
-  constructor(x, y, width, height) {
+  constructor(x, y, width, height, acceleration) {
     this.x = x;
     this.y = y;
     this.w = width;
     this.h = height;
+    this.a = acceleration;
   }
 
   display() {
@@ -28,16 +29,16 @@ class Burger {
 
   movement() {
     if (keyIsDown(UP_ARROW)) {
-      this.y -= 2;
+      this.y -= this.a;
     }
     if (keyIsDown(DOWN_ARROW)) {
-      this.y += 2;
+      this.y += this.a;
     }
     if (keyIsDown(LEFT_ARROW)) {
-      this.x -= 2;
+      this.x -= this.a;
     }
     if (keyIsDown(RIGHT_ARROW)) {
-      this.x += 2;
+      this.x += this.a;
     }
   }
 }
