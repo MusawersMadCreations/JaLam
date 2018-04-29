@@ -4,7 +4,7 @@ let person;
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
-  burger = new Burger(width/2, 100, 100, 100, 5);
+  burger = new Burger(width/2, 100, 100, 100, 500);
 
   person = new Person();
 }
