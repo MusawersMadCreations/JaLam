@@ -1,16 +1,10 @@
 let burger;
-let upTimer, downTimer, leftTimer, rightTimer;
 let person;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
-  burger = new Burger(width/2, 100, 100, 100, 0, 3);
-
-  upTimer = new Timer(1500);
-  downTimer = new Timer(1500);
-  leftTimer = new Timer(1500);
-  rightTimer = new Timer(1500);
+  burger = new Burger(width/2, 100, 100, 100);
 
   person = new Person();
 }
@@ -35,8 +29,6 @@ class Burger {
   }
 
   movement() {
-    // if one of the movement keys are pressed for at least one second, bump up acceleration
-    // timer for each arrow,
     if (keyIsDown(UP_ARROW)) {
       this.y -= this.v;
     }
