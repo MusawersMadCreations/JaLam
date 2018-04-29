@@ -4,14 +4,14 @@ let person;
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
-  burger = new Burger(width/2, 100, 100, 100);
+  burger = new Burger(width/2, 100, 100, 100, 5);
 
   person = new Person();
 }
 
 function draw() {
-  burger.display();
   burger.movement();
+  burger.display();
 }
 
 class Burger {
