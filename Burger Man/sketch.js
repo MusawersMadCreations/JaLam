@@ -43,14 +43,67 @@ class Burger {
 }
 
 class Person {
-  constructor(x, y) {
-
+  constructor(x, y, width, height) {
+    this.x = x;
+    this.y = y;
+    this.w = width;
+    this.h = height;
   }
 }
 
+class Lettuce {
+  constructor(x, y, width, height) {
+    this.x = x;
+    this.y = y;
+    this.w = width;
+    this.h = height;
+  }
+}
+
+class Tomato {
+  constructor(x, y, width, height) {
+    this.x = x;
+    this.y = y;
+    this.w = width;
+    this.h = height;
+  }
+}
+
+class Cheese {
+  constructor(x, y, width, height) {
+    this.x = x;
+    this.y = y;
+    this.w = width;
+    this.h = height;
+  }
+}
+
+class Ketchup {
+  constructor(x, y, width, height) {
+    this.x = x;
+    this.y = y;
+    this.w = width;
+    this.h = height;
+  }
+}
+
+class Onions {
+  constructor(x, y, width, height) {
+    this.x = x;
+    this.y = y;
+    this.w = width;
+    this.h = height;
+  }
+}
+
+
 // needs
 // burger movement
+
 // randomized food spawn
+// one of each item is scattered around the map
+// when item is picked up, inventory expands,
+
 // food - burger interaction
 // burger inventory array
 // burger disposable
