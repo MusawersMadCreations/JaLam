@@ -149,7 +149,7 @@ function spawnFood() {
 }
 
 function taken() {
-  if (burger.x + burger.w / 2 < lettuce.x - lettuce.w / 2 && ) {
+  if () {
     print("yo");
   }
 }
