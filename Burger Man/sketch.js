@@ -38,6 +38,7 @@ function draw() {
   spawnFood();
   burger.display();
   burger.movement();
+  taken();
 }
 
 class Burger {
@@ -86,11 +87,6 @@ class Lettuce {
   }
   spawn() {
     image(lettuceImg, this.x, this.y);
-  }
-  taken() {
-    if (burger.x + burger.w / 2 < lettuce.x - lettuce.w / 2) {
-      print("yo");
-    }
   }
   // if burger x +-radius  === lettucs +-radius
   // && burger y +-radius === lettuce +-radius
@@ -152,6 +148,11 @@ function spawnFood() {
   onion.spawn();
 }
 
+function taken() {
+  if (burger.x + burger.w / 2 < lettuce.x - lettuce.w / 2 && ) {
+    print("yo");
+  }
+}
 // if food touches a food, food disappears, inventory array gets food
 // if burger touches garbage can, clean inventory
 
