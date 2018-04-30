@@ -1,3 +1,7 @@
+// Eat Eat Revolution
+// Roger Lam
+// April 20, 2018
+
 let burger, burgerImg;
 
 let person;
@@ -8,7 +12,6 @@ let lettuce, tomato, cheese, ketchup, onion;
 let lettuceImg, tomatoImg, cheeseImg, ketchupImg, onionImg;
 let lettuceTaken, tomatoTaken, cheeseTaken, ketchupTaken, onionTaken;
 let lettuceD, tomatoD, cheeseD, ketchupD, onionD;
-let lettuceSpacing, tomatoSpacing, cheeseSpacing, onionSpacing, ketchupSpacing;
 let foodWidth, foodHeight;
 
 let inventory;
@@ -19,6 +22,9 @@ let cellSize;
 let state;
 let button;
 
+let sexyBeast;
+
+// preloads our images and audio
 function preload() {
   lettuceImg = loadImage("assets/images/lettuce.png");
   tomatoImg = loadImage("assets/images/tomato.png");
@@ -27,14 +33,16 @@ function preload() {
   onionImg = loadImage("assets/images/onion.png");
   burgerImg = loadImage("assets/images/burger.png");
   tableImg = loadImage("assets/images/table.png");
+  sexyBeast = loadImage("assets/images/d.png");
 }
 
+// executes once after preload
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
   state = "startScreen";
 
-  button = new Button(width / 2 - 175, height / 2 + 75, 300, 75);
+  button = new Button("START", width / 2 - 175, height / 2 + 75, 300, 75, [51, 25, 0], [126, 74, 16], [255, 178, 102], 30);
 
   cellSize = windowHeight / 8;
 
@@ -62,10 +70,12 @@ function setup() {
   onionTaken = false;
 }
 
+// the function that loops as fast as fps
 function draw() {
   gameLoop();
 }
 
+// the burger class
 class Burger {
   constructor(x, y, width, height) {
     this.x = x;
@@ -94,6 +104,7 @@ class Burger {
   }
 }
 
+// the person class
 class Person {
   constructor(x, y, width, height) {
     this.x = x;
@@ -103,6 +114,7 @@ class Person {
   }
 }
 
+// the lettuce class
 class Lettuce {
   constructor(x, y, width, height) {
     this.x = x;
@@ -111,11 +123,11 @@ class Lettuce {
     this.h = height;
   }
   spawn() {
-    lettuceTomatoSpacing = dist(lettuce.x, lettuce.y, tomato.x, tomato.y);
     image(lettuceImg, this.x, this.y, this.w, this.h);
   }
 }
 
+// the tomato class
 class Tomato {
   constructor(x, y, width, height) {
     this.x = x;
@@ -128,6 +140,7 @@ class Tomato {
   }
 }
 
+// the cheese class
 class Cheese {
   constructor(x, y, width, height) {
     this.x = x;
@@ -136,11 +149,11 @@ class Cheese {
     this.h = height;
   }
   spawn() {
-
     image(cheeseImg, this.x, this.y, this.w, this.h);
   }
 }
 
+// the ketchup class
 class Ketchup {
   constructor(x, y, width, height) {
     this.x = x;
@@ -153,6 +166,7 @@ class Ketchup {
   }
 }
 
+// the onions class
 class Onions {
   constructor(x, y, width, height) {
     this.x = x;
@@ -165,25 +179,26 @@ class Onions {
   }
 }
 
+// function that spawns the food on the map
 function spawnFood() {
-   lettuce.spawn();
+  lettuce.spawn();
   tomato.spawn();
   cheese.spawn();
   ketchup.spawn();
   onion.spawn();
 }
-//
-// function spawnSpacing(){
-  // lettuceSpacing = dist(lettuce.x, lettuce.y, burger.x, burger.y);
 
-// }
+// burger to food collision detection
 function collisionDetection() {
+  // calculates distance between food and burger
   lettuceD = dist(lettuce.x, lettuce.y, burger.x, burger.y);
   tomatoD = dist(tomato.x, tomato.y, burger.x, burger.y);
   cheeseD = dist(cheese.x, cheese.y, burger.x, burger.y);
   ketchupD = dist(ketchup.x, ketchup.y, burger.x, burger.y);
   onionD = dist(onion.x, onion.y, burger.x, burger.y);
 
+  // if the food to burger distance is less than their radius, they are touching
+  // if touched, changes the "food touched" state to true, otherwise the "food touched" is false
   if (lettuceD < radius * 1.2) {
     lettuceTaken = true;
     inventory.unshift("lettuce");
@@ -220,25 +235,41 @@ function collisionDetection() {
   }
 }
 
+// the button class
 class Button {
-  constructor(x, y, buttonWidth, buttonHeight) {
+  constructor(text, x, y, buttonWidth, buttonHeight, [r, g, b], [hoverR, hoverG, hoverB], [textR, textG, textB], textSize) {
+    this.text = text;
     this.buttonWidth = buttonWidth;
     this.buttonHeight = buttonHeight;
     this.leftSide = x;
     this.topSide = y;
     this.rightSide = this.leftSide + this.buttonWidth;
     this.bottomSide = this.topSide + this.buttonHeight;
+
+    this.r = r;
+    this.g = g;
+    this.b = b;
+
+    this.hoverR = hoverR;
+    this.hoverG = hoverG;
+    this.hoverB = hoverB;
+
+    this.textR = textR;
+    this.textG = textG;
+    this.textB = textB;
+
+    this.textSize = textSize;
   }
 
   display() {
-    fill(51, 25, 0);
+    fill(this.r, this.g, this.b);
     if (mouseX >= this.leftSide && mouseX <= this.rightSide && mouseY >= this.topSide && mouseY <= this.bottomSide) {
-      fill(126, 74, 16);
+      fill(this.hoverR, this.hoverG, this.hoverB);
     }
     rect(this.leftSide, this.topSide, this.buttonWidth, this.buttonHeight);
-    fill(255, 178, 102);
-    textSize(50);
-    text("START", this.leftSide + 150, this.topSide + 55);
+    fill(this.textR, this.textG, this.textB);
+    textSize(textSize);
+    text(this.text, this.leftSide + 150, this.topSide + 55);
   }
 
   isClicked() {
@@ -310,6 +341,7 @@ function gameLoop() {
     }
   } else if (state === "game") {
     image(tableImg, 0, 0, width, height);
+    // image(sexyBeast, 0, 0, width, height);
     spawnFood();
     burger.display();
     burger.movement();
