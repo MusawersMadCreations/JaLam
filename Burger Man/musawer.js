@@ -8,6 +8,7 @@ let lettuce, tomato, cheese, ketchup, onion;
 let lettuceImg, tomatoImg, cheeseImg, ketchupImg, onionImg;
 let lettuceTaken, tomatoTaken, cheeseTaken, ketchupTaken, onionTaken;
 let lettuceD, tomatoD, cheeseD, ketchupD, onionD;
+let lettuceSpacing, tomatoSpacing, cheeseSpacing, onionSpacing, ketchupSpacing;
 let foodWidth, foodHeight;
 
 let inventory;
@@ -110,6 +111,7 @@ class Lettuce {
     this.h = height;
   }
   spawn() {
+    lettuceTomatoSpacing = dist(lettuce.x, lettuce.y, tomato.x, tomato.y);
     image(lettuceImg, this.x, this.y, this.w, this.h);
   }
 }
@@ -134,6 +136,7 @@ class Cheese {
     this.h = height;
   }
   spawn() {
+
     image(cheeseImg, this.x, this.y, this.w, this.h);
   }
 }
@@ -163,13 +166,17 @@ class Onions {
 }
 
 function spawnFood() {
-  lettuce.spawn();
+   lettuce.spawn();
   tomato.spawn();
   cheese.spawn();
   ketchup.spawn();
   onion.spawn();
 }
+//
+// function spawnSpacing(){
+  // lettuceSpacing = dist(lettuce.x, lettuce.y, burger.x, burger.y);
 
+// }
 function collisionDetection() {
   lettuceD = dist(lettuce.x, lettuce.y, burger.x, burger.y);
   tomatoD = dist(tomato.x, tomato.y, burger.x, burger.y);
