@@ -1,38 +1,43 @@
-let burger;
+let burger, burgerImg;
 let person;
 let lettuce, tomato, cheese, ketchup, onion;
 let lettuceImg, tomatoImg, cheeseImg, ketchupImg, onionImg;
+let foodWidth, foodHeight;
+let inventory;
 
-function preload(){
+function preload() {
   lettuceImg = loadImage("assets/images/lettuce.png");
-  tomatoImg = loadImage("assets/images/tomato.PNG");
+  tomatoImg = loadImage("assets/images/tomato.png");
   cheeseImg = loadImage("assets/images/cheese.png");
   ketchupImg = loadImage("assets/images/ketchup.png");
-  onionImg = loadImage("assets/images/onion.PNG");
+  onionImg = loadImage("assets/images/onion.png");
+  burgerImg = loadImage("assets/images/burger.png");
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
-  burger = new Burger(width/2, 100, 100, 100);
+  burger = new Burger(width / 2, 100, 100, 100);
 
   person = new Person();
 
-  lettuce = new Lettuce(random(width - lettuceImg.width),random(height - lettuceImg.height),100,100);
-  tomato = new Tomato(random(width - tomatoImg.width),random(height - tomatoImg.height),100,100);
-  cheese = new Cheese(random(width - cheeseImg.width),random(height - cheeseImg.height),100,100);
-  ketchup = new Ketchup(random(width - ketchupImg.width),random(height - ketchupImg.height),100,100);
-  onion = new Onions(random(width - onionImg.width),random(height - onionImg.height),100,100);
+  foodWidth = 40;
+  foodHeight = 40;
+
+  lettuce = new Lettuce(random(width - lettuceImg.width), random(height - lettuceImg.height), foodWidth, foodHeight);
+  tomato = new Tomato(random(width - tomatoImg.width), random(height - tomatoImg.height), foodWidth, foodHeight);
+  cheese = new Cheese(random(width - cheeseImg.width), random(height - cheeseImg.height), foodWidth, foodHeight);
+  ketchup = new Ketchup(random(width - ketchupImg.width), random(height - ketchupImg.height), foodWidth, foodHeight);
+  onion = new Onions(random(width - onionImg.width), random(height - onionImg.height), foodWidth, foodHeight);
+
+  inventory = [];
 }
 
 function draw() {
+  background("white");
+  spawnFood();
   burger.display();
   burger.movement();
-  lettuce.spawn();
-  tomato.spawn();
-  cheese.spawn();
-  ketchup.spawn();
-  onion.spawn();
 }
 
 class Burger {
@@ -44,22 +49,21 @@ class Burger {
   }
 
   display() {
-    background("white");
-    ellipse(this.x, this.y, this.w, this.h);
+    image(burgerImg, this.x, this.y, this.w, this.h);
   }
 
   movement() {
     if (keyIsDown(UP_ARROW)) {
-      this.y -= 2;
+      this.y -= 5;
     }
     if (keyIsDown(DOWN_ARROW)) {
-      this.y += 2;
+      this.y += 5;
     }
     if (keyIsDown(LEFT_ARROW)) {
-      this.x -= 2;
+      this.x -= 5;
     }
     if (keyIsDown(RIGHT_ARROW)) {
-      this.x += 2;
+      this.x += 5;
     }
   }
 }
@@ -80,9 +84,16 @@ class Lettuce {
     this.w = width;
     this.h = height;
   }
-  spawn(){
-    image(lettuceImg,this.x,this.y);
+  spawn() {
+    image(lettuceImg, this.x, this.y);
   }
+  taken() {
+    if (burger.x + burger.w / 2 < lettuce.x - lettuce.w / 2) {
+      print("yo");
+    }
+  }
+  // if burger x +-radius  === lettucs +-radius
+  // && burger y +-radius === lettuce +-radius
 }
 
 class Tomato {
@@ -92,8 +103,8 @@ class Tomato {
     this.w = width;
     this.h = height;
   }
-  spawn(){
-    image(tomatoImg,this.x,this.y);
+  spawn() {
+    image(tomatoImg, this.x, this.y);
   }
 }
 
@@ -104,8 +115,8 @@ class Cheese {
     this.w = width;
     this.h = height;
   }
-  spawn(){
-    image(cheeseImg,this.x,this.y);
+  spawn() {
+    image(cheeseImg, this.x, this.y);
   }
 }
 
@@ -116,8 +127,8 @@ class Ketchup {
     this.w = width;
     this.h = height;
   }
-  spawn(){
-    image(ketchupImg,this.x,this.y);
+  spawn() {
+    image(ketchupImg, this.x, this.y);
   }
 }
 
@@ -128,11 +139,21 @@ class Onions {
     this.w = width;
     this.h = height;
   }
-  spawn(){
-    image(onionImg,this.x,this.y);
+  spawn() {
+    image(onionImg, this.x, this.y);
   }
 }
 
+function spawnFood() {
+  lettuce.spawn();
+  tomato.spawn();
+  cheese.spawn();
+  ketchup.spawn();
+  onion.spawn();
+}
+
+// if food touches a food, food disappears, inventory array gets food
+// if burger touches garbage can, clean inventory
 
 // needs
 // burger movement
