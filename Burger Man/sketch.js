@@ -306,7 +306,7 @@ function gameLoop() {
     }
   } else if (state === "game") {
     image(tableImg, 0, 0, width, height);
-    image(sexyBeast, 0, 0, width, height);
+    // image(sexyBeast, 0, 0, width, height);
     spawnFood();
     burger.display();
     burger.movement();
