@@ -1,3 +1,7 @@
+// Eat Eat Revolution
+// Roger Lam
+// April 20, 2018
+
 let burger, burgerImg;
 
 let person;
@@ -20,6 +24,7 @@ let button;
 
 let sexyBeast;
 
+// preloads our images and audio
 function preload() {
   lettuceImg = loadImage("assets/images/lettuce.png");
   tomatoImg = loadImage("assets/images/tomato.png");
@@ -31,12 +36,13 @@ function preload() {
   sexyBeast = loadImage("assets/images/d.png");
 }
 
+// executes once after preload
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
   state = "startScreen";
 
-  button = new Button(width / 2 - 175, height / 2 + 75, 300, 75);
+  button = new Button("START", width / 2 - 175, height / 2 + 75, 300, 75, [51, 25, 0], [126, 74, 16], [255, 178, 102], 30);
 
   cellSize = windowHeight / 8;
 
@@ -64,10 +70,12 @@ function setup() {
   onionTaken = false;
 }
 
+// the function that loops as fast as fps
 function draw() {
   gameLoop();
 }
 
+// the burger class
 class Burger {
   constructor(x, y, width, height) {
     this.x = x;
@@ -96,6 +104,7 @@ class Burger {
   }
 }
 
+// the person class
 class Person {
   constructor(x, y, width, height) {
     this.x = x;
@@ -105,6 +114,7 @@ class Person {
   }
 }
 
+// the lettuce class
 class Lettuce {
   constructor(x, y, width, height) {
     this.x = x;
@@ -117,6 +127,7 @@ class Lettuce {
   }
 }
 
+// the tomato class
 class Tomato {
   constructor(x, y, width, height) {
     this.x = x;
@@ -129,6 +140,7 @@ class Tomato {
   }
 }
 
+// the cheese class
 class Cheese {
   constructor(x, y, width, height) {
     this.x = x;
@@ -141,6 +153,7 @@ class Cheese {
   }
 }
 
+// the ketchup class
 class Ketchup {
   constructor(x, y, width, height) {
     this.x = x;
@@ -153,6 +166,7 @@ class Ketchup {
   }
 }
 
+// the onions class
 class Onions {
   constructor(x, y, width, height) {
     this.x = x;
@@ -165,6 +179,7 @@ class Onions {
   }
 }
 
+// function that spawns the food on the map
 function spawnFood() {
   lettuce.spawn();
   tomato.spawn();
@@ -173,13 +188,17 @@ function spawnFood() {
   onion.spawn();
 }
 
+// burger to food collision detection
 function collisionDetection() {
+  // calculates distance between food and burger
   lettuceD = dist(lettuce.x, lettuce.y, burger.x, burger.y);
   tomatoD = dist(tomato.x, tomato.y, burger.x, burger.y);
   cheeseD = dist(cheese.x, cheese.y, burger.x, burger.y);
   ketchupD = dist(ketchup.x, ketchup.y, burger.x, burger.y);
   onionD = dist(onion.x, onion.y, burger.x, burger.y);
 
+  // if the food to burger distance is less than their radius, they are touching
+  // if touched, changes the "food touched" state to true, otherwise the "food touched" is false
   if (lettuceD < radius * 1.2) {
     lettuceTaken = true;
     inventory.unshift("lettuce");
@@ -216,25 +235,41 @@ function collisionDetection() {
   }
 }
 
+// the button class
 class Button {
-  constructor(x, y, buttonWidth, buttonHeight) {
+  constructor(text, x, y, buttonWidth, buttonHeight, [r, g, b], [hoverR, hoverG, hoverB], [textR, textG, textB], textSize) {
+    this.text = text;
     this.buttonWidth = buttonWidth;
     this.buttonHeight = buttonHeight;
     this.leftSide = x;
     this.topSide = y;
     this.rightSide = this.leftSide + this.buttonWidth;
     this.bottomSide = this.topSide + this.buttonHeight;
+
+    this.r = r;
+    this.g = g;
+    this.b = b;
+
+    this.hoverR = hoverR;
+    this.hoverG = hoverG;
+    this.hoverB = hoverB;
+
+    this.textR = textR;
+    this.textG = textG;
+    this.textB = textB;
+
+    this.textSize = textSize;
   }
 
   display() {
-    fill(51, 25, 0);
+    fill(this.r, this.g, this.b);
     if (mouseX >= this.leftSide && mouseX <= this.rightSide && mouseY >= this.topSide && mouseY <= this.bottomSide) {
-      fill(126, 74, 16);
+      fill(this.hoverR, this.hoverG, this.hoverB);
     }
     rect(this.leftSide, this.topSide, this.buttonWidth, this.buttonHeight);
-    fill(255, 178, 102);
-    textSize(50);
-    text("START", this.leftSide + 150, this.topSide + 55);
+    fill(this.textR, this.textG, this.textB);
+    textSize(textSize);
+    text(this.text, this.leftSide + 150, this.topSide + 55);
   }
 
   isClicked() {
