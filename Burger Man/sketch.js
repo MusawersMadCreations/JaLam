@@ -18,6 +18,8 @@ let cellSize;
 let state;
 let button;
 
+let sexyBeast;
+
 function preload() {
   lettuceImg = loadImage("assets/images/lettuce.png");
   tomatoImg = loadImage("assets/images/tomato.png");
@@ -26,6 +28,7 @@ function preload() {
   onionImg = loadImage("assets/images/onion.png");
   burgerImg = loadImage("assets/images/burger.png");
   tableImg = loadImage("assets/images/table.png");
+  sexyBeast = loadImage("assets/images/d.png");
 }
 
 function setup() {
@@ -302,8 +305,8 @@ function gameLoop() {
       state = "game";
     }
   } else if (state === "game") {
-    background("black");
     image(tableImg, 0, 0, width, height);
+    image(sexyBeast, 0, 0, width, height);
     spawnFood();
     burger.display();
     burger.movement();
