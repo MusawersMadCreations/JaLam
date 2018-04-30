@@ -1,10 +1,14 @@
 let burger;
 let person;
-let lettuce
+let lettuce, tomato, cheese, ketchup, onion;
 let lettuceImg, tomatoImg, cheeseImg, ketchupImg, onionImg;
 
 function preload(){
   lettuceImg = loadImage("assets/images/lettuce.png");
+  tomatoImg = loadImage("assets/images/tomato.PNG");
+  cheeseImg = loadImage("assets/images/cheese.png");
+  ketchupImg = loadImage("assets/images/ketchup.png");
+  onionImg = loadImage("assets/images/onion.PNG");
 }
 
 function setup() {
@@ -12,13 +16,21 @@ function setup() {
 
   burger = new Burger(width/2, 100, 100, 100);
   person = new Person();
-  lettuce = new Lettuce(random(width - lettuceImg.width),random(height - lettuceImg.width),100,100);
+  lettuce = new Lettuce(random(width - lettuceImg.width),random(height - lettuceImg.height),100,100);
+  tomato = new Tomato(random(width - tomatoImg.width),random(height - tomatoImg.height),100,100);
+  cheese = new Cheese(random(width - cheeseImg.width),random(height - cheeseImg.height),100,100);
+  ketchup = new Ketchup(random(width - ketchupImg.width),random(height - ketchupImg.height),100,100);
+  onion = new Onions(random(width - onionImg.width),random(height - onionImg.height),100,100);
 }
 
 function draw() {
   burger.display();
   burger.movement();
   lettuce.spawn();
+  tomato.spawn();
+  cheese.spawn();
+  ketchup.spawn();
+  onion.spawn();
 }
 
 class Burger {
@@ -78,6 +90,9 @@ class Tomato {
     this.w = width;
     this.h = height;
   }
+  spawn(){
+    image(tomatoImg,this.x,this.y);
+  }
 }
 
 class Cheese {
@@ -86,6 +101,9 @@ class Cheese {
     this.y = y;
     this.w = width;
     this.h = height;
+  }
+  spawn(){
+    image(cheeseImg,this.x,this.y);
   }
 }
 
@@ -96,6 +114,9 @@ class Ketchup {
     this.w = width;
     this.h = height;
   }
+  spawn(){
+    image(ketchupImg,this.x,this.y);
+  }
 }
 
 class Onions {
@@ -104,6 +125,9 @@ class Onions {
     this.y = y;
     this.w = width;
     this.h = height;
+  }
+  spawn(){
+    image(onionImg,this.x,this.y);
   }
 }
 
