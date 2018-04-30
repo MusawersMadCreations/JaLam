@@ -1,16 +1,24 @@
 let burger;
 let person;
+let lettuce
+let lettuceImg, tomatoImg, cheeseImg, ketchupImg, onionImg;
+
+function preload(){
+  lettuceImg = loadImage("assets/images/lettuce.png");
+}
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
   burger = new Burger(width/2, 100, 100, 100);
   person = new Person();
+  lettuce = new Lettuce(random(width - lettuceImg.width),random(height - lettuceImg.width),100,100);
 }
 
 function draw() {
   burger.display();
   burger.movement();
+  lettuce.spawn();
 }
 
 class Burger {
@@ -57,6 +65,9 @@ class Lettuce {
     this.y = y;
     this.w = width;
     this.h = height;
+  }
+  spawn(){
+    image(lettuceImg,this.x,this.y);
   }
 }
 
