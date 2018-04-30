@@ -1,13 +1,22 @@
 let burger, burgerImg;
+
 let person;
+
+let tableImg;
+
 let lettuce, tomato, cheese, ketchup, onion;
 let lettuceImg, tomatoImg, cheeseImg, ketchupImg, onionImg;
 let lettuceTaken, tomatoTaken, cheeseTaken, ketchupTaken, onionTaken;
-let foodWidth, foodHeight;
-let inventory;
 let lettuceD, tomatoD, cheeseD, ketchupD, onionD;
+let foodWidth, foodHeight;
+
+let inventory;
+
 let radius;
 let cellSize;
+
+let state;
+let button;
 
 function preload() {
   lettuceImg = loadImage("assets/images/lettuce.png");
@@ -16,16 +25,21 @@ function preload() {
   ketchupImg = loadImage("assets/images/ketchup.png");
   onionImg = loadImage("assets/images/onion.png");
   burgerImg = loadImage("assets/images/burger.png");
+  tableImg = loadImage("assets/images/table.png");
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
+  state = "startScreen";
+
+  button = new Button(width / 2 - 175, height / 2 + 75, 300, 75);
+
   cellSize = windowHeight / 8;
 
   burger = new Burger(width / 2, 100, 80, 80);
 
-  person = new Person();
+  // person = new Person();
 
   foodWidth = 80;
   foodHeight = 80;
@@ -48,13 +62,7 @@ function setup() {
 }
 
 function draw() {
-  background("white");
-  spawnFood();
-  burger.display();
-  burger.movement();
-  collisionDetection();
-  inventoryBar();
-  newFoodLocations();
+  gameLoop();
 }
 
 class Burger {
@@ -172,46 +180,72 @@ function collisionDetection() {
   if (lettuceD < radius * 1.2) {
     lettuceTaken = true;
     inventory.unshift("lettuce");
-  }
-  else {
+  } else {
     lettuceTaken = false;
   }
 
   if (tomatoD < radius * 1.2) {
     tomatoTaken = true;
     inventory.unshift("tomato");
-  }
-  else {
+  } else {
     tomatoTaken = false;
   }
 
   if (cheeseD < radius * 1.2) {
     cheeseTaken = true;
     inventory.unshift("cheese");
-  }
-  else {
+  } else {
     cheeseTaken = false;
   }
 
   if (ketchupD < radius * 1.2) {
     ketchupTaken = true;
     inventory.unshift("ketchup");
-  }
-  else {
+  } else {
     ketchupTaken = false;
   }
 
   if (onionD < radius * 1.2) {
     onionTaken = true;
     inventory.unshift("onion");
-  }
-  else {
+  } else {
     onionTaken = false;
   }
 }
 
+class Button {
+  constructor(x, y, buttonWidth, buttonHeight) {
+    this.buttonWidth = buttonWidth;
+    this.buttonHeight = buttonHeight;
+    this.leftSide = x;
+    this.topSide = y;
+    this.rightSide = this.leftSide + this.buttonWidth;
+    this.bottomSide = this.topSide + this.buttonHeight;
+  }
+
+  display() {
+    fill(51, 25, 0);
+    if (mouseX >= this.leftSide && mouseX <= this.rightSide && mouseY >= this.topSide && mouseY <= this.bottomSide) {
+      fill(126, 74, 16);
+    }
+    rect(this.leftSide, this.topSide, this.buttonWidth, this.buttonHeight);
+    fill(255, 178, 102);
+    textSize(50);
+    text("START", this.leftSide + 150, this.topSide + 55);
+  }
+
+  isClicked() {
+    if (mouseIsPressed && mouseX >= this.leftSide && mouseX <= this.rightSide && mouseY >= this.topSide && mouseY <= this.bottomSide) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+}
+
 function inventoryBar() {
-  for (let i = 1; i < 6; i ++) {
+  fill(149, 86, 25);
+  for (let i = 1; i < 6; i++) {
     rect(10, i * cellSize, cellSize, cellSize);
     if (inventory[i - 1] === "lettuce") {
       image(lettuceImg, 10, i * cellSize, cellSize, cellSize);
@@ -247,6 +281,35 @@ function newFoodLocations() {
   if (onionTaken === true) {
     onion.x = random(cellSize * 2, windowWidth - cellSize * 2);
     onion.y = random(cellSize * 2, windowHeight - cellSize * 2);
+  }
+}
+
+function startScreen() {
+  if (state === "startScreen") {
+    image(tableImg, 0, 0, width, height);
+    textAlign(CENTER);
+    textSize(100);
+    fill(51, 25, 0);
+    text("EAT EAT REVOLUTION", width / 2, height / 2);
+  }
+}
+
+function gameLoop() {
+  if (state === "startScreen") {
+    startScreen();
+    button.display();
+    if (button.isClicked()) {
+      state = "game";
+    }
+  } else if (state === "game") {
+    background("black");
+    image(tableImg, 0, 0, width, height);
+    spawnFood();
+    burger.display();
+    burger.movement();
+    collisionDetection();
+    inventoryBar();
+    newFoodLocations();
   }
 }
 // if food touches a food, food disappears, inventory array gets food
