@@ -315,7 +315,7 @@ function gameLoop() {
     newFoodLocations();
   }
 }
-// if food touches a food, food disappears, inventory array gets food
+
 // if burger touches garbage can, clean inventory
 
 // needs
