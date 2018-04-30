@@ -21,6 +21,8 @@ function preload() {
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
+  cellSize = windowHeight / 8;
+
   burger = new Burger(width / 2, 100, 80, 80);
 
   person = new Person();
@@ -33,7 +35,7 @@ function setup() {
   lettuce = new Lettuce(random(cellSize * 2, windowWidth - cellSize * 2), random(cellSize * 2, windowHeight - cellSize * 2), foodWidth, foodHeight);
   tomato = new Tomato(random(cellSize * 2, windowWidth - cellSize * 2), random(cellSize * 2, windowHeight - cellSize * 2), foodWidth, foodHeight);
   cheese = new Cheese(random(cellSize * 2, windowWidth - cellSize * 2), random(cellSize * 2, windowHeight - cellSize * 2), foodWidth, foodHeight);
-  ketchup = new Ketchup(random(cellSize * 2, windowWidth - cellSize * 2), random(cellSize * 2, windowHeight - cellSize * 2), foodWidth, foodHeight + 40);
+  ketchup = new Ketchup(random(cellSize * 2, windowWidth - cellSize * 2), random(cellSize * 2, windowHeight - cellSize * 2), foodWidth, foodHeight + 70);
   onion = new Onions(random(cellSize * 2, windowWidth - cellSize * 2), random(cellSize * 2, windowHeight - cellSize * 2), foodWidth, foodHeight);
 
   inventory = [];
@@ -43,8 +45,6 @@ function setup() {
   cheeseTaken = false;
   ketchupTaken = false;
   onionTaken = false;
-
-  cellSize = windowHeight / 8;
 }
 
 function draw() {
@@ -54,7 +54,7 @@ function draw() {
   burger.movement();
   collisionDetection();
   inventoryBar();
-  // newFoodLocations();
+  newFoodLocations();
 }
 
 class Burger {
