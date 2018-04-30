@@ -15,7 +15,9 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
 
   burger = new Burger(width/2, 100, 100, 100);
+
   person = new Person();
+
   lettuce = new Lettuce(random(width - lettuceImg.width),random(height - lettuceImg.height),100,100);
   tomato = new Tomato(random(width - tomatoImg.width),random(height - tomatoImg.height),100,100);
   cheese = new Cheese(random(width - cheeseImg.width),random(height - cheeseImg.height),100,100);
