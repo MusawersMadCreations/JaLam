@@ -4,6 +4,7 @@ let lettuce, tomato, cheese, ketchup, onion;
 let lettuceImg, tomatoImg, cheeseImg, ketchupImg, onionImg;
 let foodWidth, foodHeight;
 let inventory;
+let lettuceD, tomatoD, cheeseD, ketchupD, onionD;
 
 function preload() {
   lettuceImg = loadImage("assets/images/lettuce.png");
@@ -17,12 +18,12 @@ function preload() {
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
-  burger = new Burger(width / 2, 100, 100, 100);
+  burger = new Burger(width / 2, 100, 60, 60);
 
   person = new Person();
 
-  foodWidth = 40;
-  foodHeight = 40;
+  foodWidth = 60;
+  foodHeight = 60;
 
   lettuce = new Lettuce(random(width - lettuceImg.width), random(height - lettuceImg.height), foodWidth, foodHeight);
   tomato = new Tomato(random(width - tomatoImg.width), random(height - tomatoImg.height), foodWidth, foodHeight);
@@ -31,6 +32,13 @@ function setup() {
   onion = new Onions(random(width - onionImg.width), random(height - onionImg.height), foodWidth, foodHeight);
 
   inventory = [];
+
+  lettuceD = dist(lettuce.x, lettuce.y, burger.x, burger.y);
+  tomatoD = dist(tomato.x, tomato.y, burger.x, burger.y);
+  cheeseD = dist(cheese.x, cheese.y, burger.x, burger.y);
+  ketchupD = dist(ketchup.x, ketchup.y, burger.x, burger.y);
+  onionD = dist(onion.x, onion.y, burger.x, burger.y);
+
 }
 
 function draw() {
@@ -149,7 +157,7 @@ function spawnFood() {
 }
 
 function taken() {
-  if () {
+  if (lettuceD < 60 / 2) {
     print("yo");
   }
 }
