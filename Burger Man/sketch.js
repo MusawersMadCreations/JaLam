@@ -296,7 +296,7 @@ function displayInventoryBar() {
 // if square "empty", allow food to get assigned to square
 
 function randomXLocation() {
-  return random(cellSize * 2, windowWidth - cellSize * 2);
+  return random(cellSize * 1.5, windowWidth - cellSize * 2.5);
 }
 
 function randomYLocation() {
@@ -305,24 +305,24 @@ function randomYLocation() {
 
 function newFoodLocations() {
   if (lettuceTaken === true) {
-    lettuce.x = random(cellSize * 1.5, windowWidth - cellSize * 2.5);
-    lettuce.y = random(cellSize * 0.5, windowHeight - cellSize * 2.5);
+    lettuce.x = randomXLocation();
+    lettuce.y = randomYLocation();
   }
   if (tomatoTaken === true) {
-    tomato.x = random(cellSize * 1.5, windowWidth - cellSize * 2.5);
-    tomato.y = random(cellSize * 0.5, windowHeight - cellSize * 2.5);
+    tomato.x = randomXLocation();
+    tomato.y = randomYLocation();
   }
   if (cheeseTaken === true) {
-    cheese.x = random(cellSize * 1.5, windowWidth - cellSize * 2.5);
-    cheese.y = random(cellSize * 0.5, windowHeight - cellSize * 2.5);
+    cheese.x = randomXLocation();
+    cheese.y = randomYLocation();
   }
   if (ketchupTaken === true) {
-    ketchup.x = random(cellSize * 1.5, windowWidth - cellSize * 2.5);
+    ketchup.x = randomXLocation();
     ketchup.y = random(cellSize * 0.5, windowHeight - cellSize * 3);
   }
   if (onionTaken === true) {
-    onion.x = random(cellSize * 1.5, windowWidth - cellSize * 2.5);
-    onion.y = random(cellSize * 0.5, windowHeight - cellSize * 2.5);
+    onion.x = randomXLocation();
+    onion.y = randomYLocation();
   }
 }
 
