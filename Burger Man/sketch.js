@@ -55,13 +55,13 @@ function setup() {
 
   radius = foodWidth / 2;
 
-  lettuce = new Lettuce(random(cellSize * 2, windowWidth - cellSize * 2), random(cellSize * 2, windowHeight - cellSize * 2), foodWidth, foodHeight);
-  tomato = new Tomato(random(cellSize * 2, windowWidth - cellSize * 2), random(cellSize * 2, windowHeight - cellSize * 2), foodWidth, foodHeight);
-  cheese = new Cheese(random(cellSize * 2, windowWidth - cellSize * 2), random(cellSize * 2, windowHeight - cellSize * 2), foodWidth, foodHeight);
-  ketchup = new Ketchup(random(cellSize * 2, windowWidth - cellSize * 2), random(cellSize * 2, windowHeight - cellSize * 2), foodWidth, foodHeight + 70);
-  onion = new Onions(random(cellSize * 2, windowWidth - cellSize * 2), random(cellSize * 2, windowHeight - cellSize * 2), foodWidth, foodHeight);
+  lettuce = new Lettuce(random(cellSize * 1.5, windowWidth - cellSize * 2), random(cellSize * 1.5, windowHeight - cellSize * 2), foodWidth, foodHeight);
+  tomato = new Tomato(random(cellSize * 1.5, windowWidth - cellSize * 2), random(cellSize * 1.5, windowHeight - cellSize * 2), foodWidth, foodHeight);
+  cheese = new Cheese(random(cellSize * 1.5, windowWidth - cellSize * 2), random(cellSize * 1.5, windowHeight - cellSize * 2), foodWidth, foodHeight);
+  ketchup = new Ketchup(random(cellSize * 1.5, windowWidth - cellSize * 2), random(cellSize * 1.5, windowHeight - cellSize * 3), foodWidth, foodHeight + 70);
+  onion = new Onions(random(cellSize * 1.5, windowWidth - cellSize * 2), random(cellSize * 1.5, windowHeight - cellSize * 2), foodWidth, foodHeight);
 
-  inventory = [];
+  inventory = createInventoryBar();
 
   lettuceTaken = false;
   tomatoTaken = false;
@@ -198,40 +198,26 @@ function collisionDetection() {
   onionD = dist(onion.x, onion.y, burger.x, burger.y);
 
   // if the food to burger distance is less than their radius, they are touching
-  // if touched, changes the "food touched" state to true, otherwise the "food touched" is false
+  // if touched, sets the "food touched" state to true, otherwise the "food touched" is false
   if (lettuceD < radius * 1.2) {
     lettuceTaken = true;
-    inventory.unshift("lettuce");
-  } else {
-    lettuceTaken = false;
+    // inventory.unshift("lettuce");
   }
-
   if (tomatoD < radius * 1.2) {
     tomatoTaken = true;
-    inventory.unshift("tomato");
-  } else {
-    tomatoTaken = false;
+    // inventory.unshift("tomato");
   }
-
   if (cheeseD < radius * 1.2) {
     cheeseTaken = true;
-    inventory.unshift("cheese");
-  } else {
-    cheeseTaken = false;
+    // inventory.unshift("cheese");
   }
-
   if (ketchupD < radius * 1.2) {
     ketchupTaken = true;
-    inventory.unshift("ketchup");
-  } else {
-    ketchupTaken = false;
+    // inventory.unshift("ketchup");
   }
-
   if (onionD < radius * 1.2) {
     onionTaken = true;
-    inventory.unshift("onion");
-  } else {
-    onionTaken = false;
+    // inventory.unshift("onion");
   }
 }
 
@@ -281,15 +267,33 @@ class Button {
   }
 }
 
-function inventoryBar() {
-  fill(149, 86, 25);
+function createInventoryBar() {
+  let newInventory = [];
   for (let i = 1; i < 6; i++) {
-    rect(10, i * cellSize, cellSize, cellSize);
-    if (inventory[i - 1] === "lettuce") {
-      image(lettuceImg, 10, i * cellSize, cellSize, cellSize);
+    newInventory.push("empty");
+  }
+  return newInventory;
+}
+
+function displayInventoryBar() {
+  fill(149, 86, 25);
+  for (let i = 1; i < inventory.length + 2; i++) {
+    if (inventory[i - 1] === "empty" && lettuceTaken === true) {
+      rect(10, i * cellSize, cellSize, cellSize);
+      // lettuceTaken = false;
+      // inventory[i - 1] = "lettuce";
     }
+    rect(10, i * cellSize, cellSize, cellSize);
+    // inventory.push(0);
+    // if (inventory[i - 1] === "lettuce") {
+    //   image(lettuceImg, 10, i * cellSize, cellSize, cellSize);
+    // }
   }
 }
+
+// if burger picks up lettuce, the lettuce gets assigned the first square
+// burger then picks up onion, the onion gets assigned the second square
+// if square "empty", allow food to get assigned to square
 
 function randomXLocation() {
   return random(cellSize * 2, windowWidth - cellSize * 2);
@@ -301,24 +305,24 @@ function randomYLocation() {
 
 function newFoodLocations() {
   if (lettuceTaken === true) {
-    lettuce.x = random(cellSize * 2, windowWidth - cellSize * 2);
-    lettuce.y = random(cellSize * 2, windowHeight - cellSize * 2);
+    lettuce.x = random(cellSize * 1.5, windowWidth - cellSize * 2.5);
+    lettuce.y = random(cellSize * 0.5, windowHeight - cellSize * 2.5);
   }
   if (tomatoTaken === true) {
-    tomato.x = random(cellSize * 2, windowWidth - cellSize * 2);
-    tomato.y = random(cellSize * 2, windowHeight - cellSize * 2);
+    tomato.x = random(cellSize * 1.5, windowWidth - cellSize * 2.5);
+    tomato.y = random(cellSize * 0.5, windowHeight - cellSize * 2.5);
   }
   if (cheeseTaken === true) {
-    cheese.x = random(cellSize * 2, windowWidth - cellSize * 2);
-    cheese.y = random(cellSize * 2, windowHeight - cellSize * 2);
+    cheese.x = random(cellSize * 1.5, windowWidth - cellSize * 2.5);
+    cheese.y = random(cellSize * 0.5, windowHeight - cellSize * 2.5);
   }
   if (ketchupTaken === true) {
-    ketchup.x = random(cellSize * 2, windowWidth - cellSize * 2);
-    ketchup.y = random(cellSize * 2, windowHeight - cellSize * 2);
+    ketchup.x = random(cellSize * 1.5, windowWidth - cellSize * 2.5);
+    ketchup.y = random(cellSize * 0.5, windowHeight - cellSize * 3);
   }
   if (onionTaken === true) {
-    onion.x = random(cellSize * 2, windowWidth - cellSize * 2);
-    onion.y = random(cellSize * 2, windowHeight - cellSize * 2);
+    onion.x = random(cellSize * 1.5, windowWidth - cellSize * 2.5);
+    onion.y = random(cellSize * 0.5, windowHeight - cellSize * 2.5);
   }
 }
 
@@ -346,22 +350,17 @@ function gameLoop() {
     burger.display();
     burger.movement();
     collisionDetection();
-    inventoryBar();
+    displayInventoryBar();
     newFoodLocations();
   }
 }
 
-// if burger touches garbage can, clean inventory
+// Roger:
+// 1. inventory
+// 2. minimum distance between foods
+// 3. burger - person interaction
 
-// needs
-// burger movement
-
-// randomized food spawn
-// one of each item is scattered around the map
-// when item is picked up, inventory expands,
-
-// food - burger interaction
-// burger inventory array
-// burger disposable
-// person to burger interaction
-// timer / countdown
+// Musawer:
+// 1. generic-ize the button class
+// 2. garbage bin
+// 3. timer system
