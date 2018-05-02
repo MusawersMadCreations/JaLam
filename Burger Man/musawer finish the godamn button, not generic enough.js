@@ -22,7 +22,8 @@ let cellSize;
 let state;
 let button;
 
-let sexyBeast;
+let titleTextSize;
+
 
 // preloads our images and audio
 function preload() {
@@ -33,7 +34,6 @@ function preload() {
   onionImg = loadImage("assets/images/onion.png");
   burgerImg = loadImage("assets/images/burger.png");
   tableImg = loadImage("assets/images/table.png");
-  sexyBeast = loadImage("assets/images/d.png");
 }
 
 // executes once after preload
@@ -42,9 +42,10 @@ function setup() {
 
   state = "startScreen";
 
-  button = new Button("START", width / 2 - 175, height / 2 + 75, 300, 75, [51, 25, 0], [126, 74, 16], [255, 178, 102], 30);
+  button = new Button("START", width / 2 - 175, height / 2 + 75, 300, 75, [51, 25, 0], [126, 74, 16], [255, 178, 102], 25);
 
   cellSize = windowHeight / 8;
+  titleTextSize = 100;
 
   burger = new Burger(width / 2, 100, 80, 80);
 
@@ -179,7 +180,7 @@ class Onions {
   }
 }
 
-// function that spawns the food on the map
+// function that spawns the food on the map 
 function spawnFood() {
   lettuce.spawn();
   tomato.spawn();
@@ -268,7 +269,7 @@ class Button {
     }
     rect(this.leftSide, this.topSide, this.buttonWidth, this.buttonHeight);
     fill(this.textR, this.textG, this.textB);
-    textSize(textSize);
+    textSize(this.textSize);
     text(this.text, this.leftSide + 150, this.topSide + 55);
   }
 
@@ -326,7 +327,7 @@ function startScreen() {
   if (state === "startScreen") {
     image(tableImg, 0, 0, width, height);
     textAlign(CENTER);
-    textSize(100);
+    textSize(titleTextSize);
     fill(51, 25, 0);
     text("EAT EAT REVOLUTION", width / 2, height / 2);
   }
