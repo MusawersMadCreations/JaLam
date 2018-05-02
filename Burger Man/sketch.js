@@ -304,21 +304,24 @@ function randomYLocation() {
   return random(cellSize * 2, windowHeight - cellSize * 2);
 }
 
-// function checkFoodDistances() {
-//   foodList[0] = [lettuce.x, lettuce.y];
-//   foodList[1] = [tomato.x, tomato.y];
-//   foodList[2] = [cheese.x, cheese.y];
-//   foodList[3] = [ketchup.x, ketchup.y];
-//   foodList[4] = [onion.x, onion.y];
-//
-//   for (let i = 0; i < foodList.length; i++) {
-//     for (let j = 0; j < foodList.length * 2; j++) {
-//       for (let q = 0; q < 2; q++) {
-//         foodList[i][q]
-//       }
-//     }
-//   }
-// }
+function checkFoodDistances() {
+  // foodList[0] = [lettuce.x, lettuce.y];
+  // foodList[1] = [tomato.x, tomato.y];
+  // foodList[2] = [cheese.x, cheese.y];
+  // foodList[3] = [ketchup.x, ketchup.y];
+  // foodList[4] = [onion.x, onion.y];
+  foodList = [lettuce, tomato, cheese, ketchup, onion];
+
+  for (let i = 0; i < foodList.length; i++) {
+    for (let j = 0; j < foodList.length; j++) {
+      if (i !== j) {
+        if (dist(foodList[i].x, foodList[i].y, foodList[j].x, foodList[j].y) < 50) {
+
+        }
+      }
+    }
+  }
+}
 
 function newFoodLocations() {
   if (lettuceTaken === true) {
