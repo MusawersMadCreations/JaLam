@@ -9,7 +9,7 @@ let person;
 let tableImg;
 
 let lettuce, tomato, cheese, ketchup, onion;
-let lettuceImg, tomatoImg, cheeseImg, ketchupImg, onionImg;
+let lettuceImg, tomatoImg, cheeseImg, ketchupImg, onionImg, trashImg;
 let lettuceTaken, tomatoTaken, cheeseTaken, ketchupTaken, onionTaken;
 let lettuceD, tomatoD, cheeseD, ketchupD, onionD;
 let foodWidth, foodHeight;
@@ -33,6 +33,7 @@ function preload() {
   onionImg = loadImage("assets/images/onion.png");
   burgerImg = loadImage("assets/images/burger.png");
   tableImg = loadImage("assets/images/table.png");
+  trashImg = loadImage("assets/images/trash.png");
   sexyBeast = loadImage("assets/images/d.png");
 }
 
@@ -42,7 +43,7 @@ function setup() {
 
   state = "startScreen";
 
-  button = new Button("START", width / 2 - 175, height / 2 + 75, 300, 75, [51, 25, 0], [126, 74, 16], [255, 178, 102], 30);
+  button = new Button("CAT", width / 2 - 175, height / 2 + 75, 300, 75, [51, 25, 0], [126, 74, 1], [255, 178, 102], 30, 150, 55);
 
   cellSize = windowHeight / 8;
 
@@ -223,7 +224,7 @@ function collisionDetection() {
 
 // the button class
 class Button {
-  constructor(text, x, y, buttonWidth, buttonHeight, [r, g, b], [hoverR, hoverG, hoverB], [textR, textG, textB], textSize) {
+  constructor(text, x, y, buttonWidth, buttonHeight, [r, g, b], [hoverR, hoverG, hoverB], [textR, textG, textB], textSize, textX, textY) {
     this.text = text;
     this.buttonWidth = buttonWidth;
     this.buttonHeight = buttonHeight;
@@ -245,8 +246,9 @@ class Button {
     this.textB = textB;
 
     this.textSize = textSize;
+    this.textX = this.leftSide + textX;
+    this.textX = this.topSide + textY;
   }
-
   display() {
     fill(this.r, this.g, this.b);
     if (mouseX >= this.leftSide && mouseX <= this.rightSide && mouseY >= this.topSide && mouseY <= this.bottomSide) {
@@ -255,7 +257,7 @@ class Button {
     rect(this.leftSide, this.topSide, this.buttonWidth, this.buttonHeight);
     fill(this.textR, this.textG, this.textB);
     textSize(textSize);
-    text(this.text, this.leftSide + 150, this.topSide + 55);
+    text(this.text, this.textX, this.textY);
   }
 
   isClicked() {
@@ -267,6 +269,9 @@ class Button {
   }
 }
 
+function trash(){
+  image(trashImg,0,0);
+}
 function createInventoryBar() {
   let newInventory = [];
   for (let i = 1; i < 6; i++) {
