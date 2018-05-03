@@ -43,7 +43,7 @@ function setup() {
 
   state = "startScreen";
 
-  button = new Button("Start", width / 2 - 175, height / 2 + 75, 300, 75, [51, 25, 0], [126, 74, 1], [255, 178, 102], 30, 150, 55);
+  button = new Button("Start", width / 2 - 175, height / 2 + 75, 300, 75, [51, 25, 0], [126, 74, 1], [255, 178, 102], 30, 155, 55);
 
   cellSize = windowHeight / 8;
 
@@ -245,7 +245,7 @@ class Button {
     this.textG = textG;
     this.textB = textB;
 
-    this.textSize = textSize;
+    this.textSize = textSize();
     this.textX = textX;
     this.textY = textY;
   }
@@ -333,10 +333,10 @@ function newFoodLocations() {
 }
 
 function startScreen() {
+  textSize(100);
   if (state === "startScreen") {
     image(tableImg, 0, 0, width, height);
     textAlign(CENTER);
-    textSize(100);
     fill(51, 25, 0);
     text("EAT EAT REVOLUTION", width / 2, height / 2);
   }
