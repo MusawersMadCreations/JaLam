@@ -2,6 +2,7 @@
 // Roger Lam
 // April 20, 2018
 
+let gameTimer;
 let burger, burgerImg;
 
 let person, personImg;
@@ -43,7 +44,11 @@ function setup() {
 
   state = "startScreen";
 
+<<<<<<< HEAD
   gameTimer = new Timer(7000, width / 2 - 50, 100);
+=======
+  gameTimer = new Timer(7000, width - 80, 275);
+>>>>>>> b646833f74f5360a1d1f5cb53056a1776a7b54ae
 
   button = new Button("START", width / 2 - 175, height / 2 + 80, 320, 80, [51, 25, 0], [126, 74, 16], [255, 178, 102], 30, 160, 75);
 
@@ -276,9 +281,21 @@ class Timer {
     this.textY = textY;
   }
 
+<<<<<<< HEAD
   display() {
     // rect(x,y,w,h,[tl],[tr],[br],[bl]);
     text(int(millis() / 1000), this.textX, this.textY);
+=======
+  display(){
+    textSize(50);
+    text("Time",this.textX - 5 ,this.textY - 90)
+    fill(51, 25, 0);
+    rect(this.textX - 80,this.textY - 85, 155,100,25);
+    fill(255, 178, 102);
+    textSize(100);
+    text(int(millis()/1000),this.textX,this.textY);
+
+>>>>>>> b646833f74f5360a1d1f5cb53056a1776a7b54ae
   }
 
   reset(newWaitTime) {
@@ -403,6 +420,7 @@ function startScreen() {
 }
 
 function gameLoop() {
+  background(255);
   if (state === "startScreen") {
     startScreen();
     button.display();
@@ -422,6 +440,7 @@ function gameLoop() {
   }
 }
 
+<<<<<<< HEAD
 function trash() {
   let trashX = width - 160;
   let trashY = height / 2;
@@ -430,6 +449,19 @@ function trash() {
   rect(trashX, trashY, trashSize, trashSize, 25);
   image(trashImg, trashX, trashY, trashSize, trashSize);
   if (burger.x >= trashX && burger.y >= trashY) {
+=======
+function trash(){
+  let trashX = width - 160;
+  let trashY = height/2;
+  let trashSize = 155;
+  fill(126, 74, 16);
+  textSize(50);
+  text("Trash", trashX + 75 ,trashY - 10);
+  fill(62,37,15);
+  rect(trashX ,trashY ,trashSize,trashSize,25);
+  image(trashImg,trashX,trashY,trashSize,trashSize);
+  if (burger.x >= trashX && burger.y >= trashY){
+>>>>>>> b646833f74f5360a1d1f5cb53056a1776a7b54ae
     burger.x = width / 2;
     burger.y = 100;
   }
