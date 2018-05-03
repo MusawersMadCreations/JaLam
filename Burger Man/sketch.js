@@ -2,6 +2,7 @@
 // Roger Lam
 // April 20, 2018
 
+let gameTimer;
 let burger, burgerImg;
 
 let person;

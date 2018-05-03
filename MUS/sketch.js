@@ -2,6 +2,7 @@
 // Roger Lam
 // April 20, 2018
 
+let gameTimer;
 let burger, burgerImg;
 
 let person;
@@ -47,7 +48,7 @@ function setup() {
 
   gameTimer = new Timer(7000, width/2 - 50, 100);
 
-  button = new Button("START", width / 2 - 175, height / 2 + 80, 320, 80, [51, 25, 0], [126, 74, 16], [255, 178, 102], 30, 160, 75);
+  button = new Button("START", width / 2 - 175, height / 2 + 75, 300, 75, [51, 25, 0], [126, 74, 16], [255, 178, 102], 30, 170, 55);
 
   cellSize = windowHeight / 8;
 
