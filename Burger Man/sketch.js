@@ -5,11 +5,12 @@
 let burger, burgerImg;
 
 let person;
+let orderIsDone;
 
 let tableImg;
 
 let lettuce, tomato, cheese, ketchup, onion;
-let lettuceImg, tomatoImg, cheeseImg, ketchupImg, onionImg;
+let lettuceImg, tomatoImg, cheeseImg, ketchupImg, onionImg, trashImg;
 let lettuceTaken, tomatoTaken, cheeseTaken, ketchupTaken, onionTaken;
 let lettuceD, tomatoD, cheeseD, ketchupD, onionD;
 let foodList;
@@ -34,6 +35,7 @@ function preload() {
   onionImg = loadImage("assets/images/onion.png");
   burgerImg = loadImage("assets/images/burger.png");
   tableImg = loadImage("assets/images/table.png");
+  trashImg = loadImage("assets/images/trash.png");
   sexyBeast = loadImage("assets/images/d.png");
 }
 
@@ -43,6 +45,8 @@ function setup() {
 
   state = "startScreen";
 
+  gameTimer = new Timer(7000, width/2 - 50, 100);
+
   button = new Button("START", width / 2 - 175, height / 2 + 75, 300, 75, [51, 25, 0], [126, 74, 16], [255, 178, 102], 30);
 
   cellSize = windowHeight / 8;
@@ -50,6 +54,7 @@ function setup() {
   burger = new Burger(width / 2, 100, 80, 80);
 
   // person = new Person();
+  orderIsDone = false; // if person has been fulfilled in time
 
   foodWidth = 80;
   foodHeight = 80;
@@ -75,6 +80,15 @@ function setup() {
 // the function that loops as fast as fps
 function draw() {
   gameLoop();
+  gameTimer.display();
+  if (gameTimer.isDone()) {
+   print("It Works")
+   //state = "gameOver";
+  if (orderIsDone) { // WHEN GUY WHO ORDERS RECIEVES HIS ORDER
+    gameTimer.reset(7000);
+    // makeOrder()       // make new order
+    }
+  }
 }
 
 // the burger class
@@ -290,9 +304,45 @@ function collisionDetection() {
   }
 }
 
+class Timer {
+  constructor(waitTime,textX,textY) {
+    this.waitTime = waitTime;
+    this.startTime = millis();
+    this.finishTime = this.startTime + this.waitTime;
+    this.timerIsDone = false;
+
+    this.text = millis()
+    this.textX = textX;
+    this.textY = textY;
+  }
+
+  display(){
+    // rect(x,y,w,h,[tl],[tr],[br],[bl]);
+    String(this.text)
+    text(this.text,this.textX,this.textY);
+
+  }
+
+  reset(newWaitTime) {
+    this.waitTime = newWaitTime;
+    this.startTime = millis();
+    this.finishTime = this.startTime + this.waitTime;
+    this.timerIsDone = false;
+  }
+
+  isDone() {
+    if (millis() >= this.finishTime) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+}
+
 // the button class
 class Button {
-  constructor(text, x, y, buttonWidth, buttonHeight, [r, g, b], [hoverR, hoverG, hoverB], [textR, textG, textB], textSize) {
+  constructor(text, x, y, buttonWidth, buttonHeight, [r, g, b], [hoverR, hoverG, hoverB], [textR, textG, textB], textSize, textX, textY) {
     this.text = text;
     this.buttonWidth = buttonWidth;
     this.buttonHeight = buttonHeight;
@@ -314,8 +364,9 @@ class Button {
     this.textB = textB;
 
     this.textSize = textSize;
+    this.textX = textX;
+    this.textY = textY;
   }
-
   display() {
     fill(this.r, this.g, this.b);
     if (mouseX >= this.leftSide && mouseX <= this.rightSide && mouseY >= this.topSide && mouseY <= this.bottomSide) {
@@ -324,7 +375,8 @@ class Button {
     rect(this.leftSide, this.topSide, this.buttonWidth, this.buttonHeight);
     fill(this.textR, this.textG, this.textB);
     textSize(textSize);
-    text(this.text, this.leftSide + 150, this.topSide + 55);
+
+    text(this.text, this.leftSide + this.textX, this.topSide + this.textY);
   }
 
   isClicked() {
@@ -412,11 +464,25 @@ function gameLoop() {
     image(tableImg, 0, 0, width, height);
     // image(sexyBeast, 0, 0, width, height);
     spawnFood();
+    trash();
     burger.display();
     burger.movement();
     collisionDetection();
     displayInventoryBar();
     newFoodLocations();
+  }
+}
+
+function trash(){
+  trashX = width - 160;
+  trashY = height/2;
+  trashSize = 155;
+  fill(62,37,15);
+  rect(trashX ,trashY ,trashSize,trashSize,25);
+  image(trashImg,trashX,trashY,trashSize,trashSize);
+  if (burger.x >= trashX && burger.y >= trashY){
+    burger.x = width / 2;
+    burger.y =  100;
   }
 }
 
@@ -426,6 +492,7 @@ function gameLoop() {
 // 3. burger - person interaction
 
 // Musawer:
-// 1. generic-ize the button class
-// 2. garbage bin
+// 1. generic-ize the button class DONE
+// 2. garbage bin 75% DONE
 // 3. timer system
+// 4. person

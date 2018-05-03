@@ -2,8 +2,6 @@
 // Roger Lam
 // April 20, 2018
 
-let gameTimer;
-
 let burger, burgerImg;
 
 let person;
@@ -15,6 +13,7 @@ let lettuce, tomato, cheese, ketchup, onion;
 let lettuceImg, tomatoImg, cheeseImg, ketchupImg, onionImg, trashImg;
 let lettuceTaken, tomatoTaken, cheeseTaken, ketchupTaken, onionTaken;
 let lettuceD, tomatoD, cheeseD, ketchupD, onionD;
+let foodList;
 let foodWidth, foodHeight;
 
 let inventory;
@@ -48,7 +47,7 @@ function setup() {
 
   gameTimer = new Timer(7000, width/2 - 50, 100);
 
-  button = new Button("Start", width / 2 - 175, height / 2 + 70, 300, 80, [51, 25, 0], [126, 74, 1], [255, 178, 102], 100, 147, 75);
+  button = new Button("START", width / 2 - 175, height / 2 + 75, 300, 75, [51, 25, 0], [126, 74, 16], [255, 178, 102], 30);
 
   cellSize = windowHeight / 8;
 
@@ -67,6 +66,7 @@ function setup() {
   cheese = new Cheese(random(cellSize * 1.5, windowWidth - cellSize * 2), random(cellSize * 1.5, windowHeight - cellSize * 2), foodWidth, foodHeight);
   ketchup = new Ketchup(random(cellSize * 1.5, windowWidth - cellSize * 2), random(cellSize * 1.5, windowHeight - cellSize * 3), foodWidth, foodHeight + 70);
   onion = new Onions(random(cellSize * 1.5, windowWidth - cellSize * 2), random(cellSize * 1.5, windowHeight - cellSize * 2), foodWidth, foodHeight);
+  foodList = [lettuce, tomato, cheese, ketchup, onion];
 
   inventory = createInventoryBar();
 
@@ -141,6 +141,21 @@ class Lettuce {
   spawn() {
     image(lettuceImg, this.x, this.y, this.w, this.h);
   }
+
+  checkDist() {
+    // foodList = [lettuce, tomato]
+    this.x = randomXLocation();
+    this.y = randomYLocation();
+    for (let i = 0; i < foodList.length; i++) {
+      if (foodList[i] !== this) {
+        if (dist(this.x, this.y, foodList[i].x, foodList[i].y) < 200) {
+          this.x = randomXLocation();
+          this.y = randomYLocation();
+        }
+      }
+    }
+    lettuceTaken = false;
+  }
 }
 
 // the tomato class
@@ -153,6 +168,19 @@ class Tomato {
   }
   spawn() {
     image(tomatoImg, this.x, this.y, this.w, this.h);
+  }
+  checkDist() {
+    this.x = randomXLocation();
+    this.y = randomYLocation();
+    for (let i = 0; i < foodList.length; i++) {
+      if (foodList[i] !== this) {
+        if (dist(this.x, this.y, foodList[i].x, foodList[i].y) < 200) {
+          this.x = randomXLocation();
+          this.y = randomYLocation();
+        }
+      }
+    }
+    tomatoTaken = false;
   }
 }
 
@@ -167,6 +195,19 @@ class Cheese {
   spawn() {
     image(cheeseImg, this.x, this.y, this.w, this.h);
   }
+  checkDist() {
+    this.x = randomXLocation();
+    this.y = randomYLocation();
+    for (let i = 0; i < foodList.length; i++) {
+      if (foodList[i] !== this) {
+        if (dist(this.x, this.y, foodList[i].x, foodList[i].y) < 200) {
+          this.x = randomXLocation();
+          this.y = randomYLocation();
+        }
+      }
+    }
+    cheeseTaken = false;
+  }
 }
 
 // the ketchup class
@@ -180,6 +221,19 @@ class Ketchup {
   spawn() {
     image(ketchupImg, this.x, this.y, this.w, this.h);
   }
+  checkDist() {
+    this.x = randomXLocation();
+    this.y = randomYLocation();
+    for (let i = 0; i < foodList.length; i++) {
+      if (foodList[i] !== this) {
+        if (dist(this.x, this.y, foodList[i].x, foodList[i].y) < 200) {
+          this.x = randomXLocation();
+          this.y = randomYLocation();
+        }
+      }
+    }
+    ketchupTaken = false;
+  }
 }
 
 // the onions class
@@ -192,6 +246,19 @@ class Onions {
   }
   spawn() {
     image(onionImg, this.x, this.y, this.w, this.h);
+  }
+  checkDist() {
+    this.x = randomXLocation();
+    this.y = randomYLocation();
+    for (let i = 0; i < foodList.length; i++) {
+      if (foodList[i] !== this) {
+        if (dist(this.x, this.y, foodList[i].x, foodList[i].y) < 200) {
+          this.x = randomXLocation();
+          this.y = randomYLocation();
+        }
+      }
+    }
+    onionTaken = false;
   }
 }
 
@@ -354,37 +421,33 @@ function randomXLocation() {
 }
 
 function randomYLocation() {
-  return random(cellSize * 2, windowHeight - cellSize * 2);
+  return random(cellSize *1.25, windowHeight - cellSize * 3);
 }
 
 function newFoodLocations() {
   if (lettuceTaken === true) {
-    lettuce.x = randomXLocation();
-    lettuce.y = randomYLocation();
+    lettuce.checkDist();
+    // lettuceTaken = false;
   }
   if (tomatoTaken === true) {
-    tomato.x = randomXLocation();
-    tomato.y = randomYLocation();
+    tomato.checkDist();
   }
   if (cheeseTaken === true) {
-    cheese.x = randomXLocation();
-    cheese.y = randomYLocation();
+    cheese.checkDist();
   }
   if (ketchupTaken === true) {
-    ketchup.x = randomXLocation();
-    ketchup.y = random(cellSize * 0.5, windowHeight - cellSize * 3);
+    ketchup.checkDist();
   }
   if (onionTaken === true) {
-    onion.x = randomXLocation();
-    onion.y = randomYLocation();
+    onion.checkDist();
   }
 }
 
 function startScreen() {
-  textSize(100);
   if (state === "startScreen") {
     image(tableImg, 0, 0, width, height);
     textAlign(CENTER);
+    textSize(100);
     fill(51, 25, 0);
     text("EAT EAT REVOLUTION", width / 2, height / 2);
   }
@@ -422,6 +485,7 @@ function trash(){
     burger.y =  100;
   }
 }
+
 // Roger:
 // 1. inventory
 // 2. minimum distance between foods
