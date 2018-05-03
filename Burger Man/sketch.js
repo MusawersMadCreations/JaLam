@@ -1,6 +1,9 @@
 // Eat Eat Revolution
-// Roger Lam
+// Musawer and Roger
 // April 20, 2018
+
+// Musawer's contribution: start screen, timer, trash, class creation, game loop creation
+// Roger's contribution: inventory, burger movement, collision detection, food spawn
 
 let burger, burgerImg;
 
@@ -43,7 +46,7 @@ function setup() {
 
   state = "startScreen";
 
-  gameTimer = new Timer(7000, width - 85, 275);
+  gameTimer = new Timer(7000, width - 80, 175);
 
   button = new Button("START", width / 2 - 175, height / 2 + 80, 320, 80, [51, 25, 0], [126, 74, 16], [255, 178, 102], 30, 160, 75);
 
@@ -111,8 +114,7 @@ class Burger {
       if (keyIsDown(UP_ARROW)) {
         this.y -= 5;
       }
-    }
-    else {
+    } else {
       this.y += 5;
     }
 
@@ -120,8 +122,7 @@ class Burger {
       if (keyIsDown(DOWN_ARROW)) {
         this.y += 5;
       }
-    }
-    else {
+    } else {
       this.y -= 5;
     }
 
@@ -129,8 +130,7 @@ class Burger {
       if (keyIsDown(LEFT_ARROW)) {
         this.x -= 5;
       }
-    }
-    else {
+    } else {
       this.x += 5;
     }
 
@@ -138,8 +138,7 @@ class Burger {
       if (keyIsDown(RIGHT_ARROW)) {
         this.x += 5;
       }
-    }
-    else {
+    } else {
       this.x -= 5;
     }
   }
@@ -277,7 +276,6 @@ class Timer {
   }
 
   display() {
-    rect(this.textX,this.textY,175,100);
     textSize(100);
     fill(126, 74, 16);
     text(int(millis() / 1000), this.textX, this.textY);
@@ -331,6 +329,7 @@ class Button {
     if (mouseX >= this.leftSide && mouseX <= this.rightSide && mouseY >= this.topSide && mouseY <= this.bottomSide) {
       fill(this.hoverR, this.hoverG, this.hoverB);
     }
+    rectMode(CORNER);
     rect(this.leftSide, this.topSide, this.buttonWidth, this.buttonHeight);
     fill(this.textR, this.textG, this.textB);
     textSize(textSize);
@@ -431,7 +430,8 @@ function trash() {
   let trashSize = 155;
   fill(62, 37, 15);
   textSize(50);
-  text("Trash",trashX + 75,trashY - 10);
+  text("Trash", trashX + 75, trashY - 10);
+  rectMode(CORNER);
   rect(trashX, trashY, trashSize, trashSize, 25);
   image(trashImg, trashX, trashY, trashSize, trashSize);
   if (burger.x >= trashX && burger.y >= trashY) {
