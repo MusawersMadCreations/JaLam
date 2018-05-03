@@ -43,7 +43,7 @@ function setup() {
 
   state = "startScreen";
 
-  button = new Button("Start", width / 2 - 175, height / 2 + 75, 300, 75, [51, 25, 0], [126, 74, 1], [255, 178, 102], 30, 155, 55);
+  button = new Button("Start", width / 2 - 175, height / 2 + 70, 300, 80, [51, 25, 0], [126, 74, 1], [255, 178, 102], 100, 147, 75);
 
   cellSize = windowHeight / 8;
 
@@ -245,7 +245,7 @@ class Button {
     this.textG = textG;
     this.textB = textB;
 
-    this.textSize = textSize();
+    this.textSize = textSize;
     this.textX = textX;
     this.textY = textY;
   }
@@ -270,9 +270,6 @@ class Button {
   }
 }
 
-function trash(){
-  image(trashImg,0,0);
-}
 function createInventoryBar() {
   let newInventory = [];
   for (let i = 1; i < 6; i++) {
@@ -353,20 +350,35 @@ function gameLoop() {
     image(tableImg, 0, 0, width, height);
     // image(sexyBeast, 0, 0, width, height);
     spawnFood();
+    trash();
     burger.display();
     burger.movement();
     collisionDetection();
     displayInventoryBar();
     newFoodLocations();
+
   }
 }
 
+function trash(){
+  trashX = width - 180;
+  trashY = height/2;
+  trashSize = 180;
+  fill(62,37,15);
+  rect(trashX ,trashY ,180,180,25);
+  image(trashImg,trashX,trashY,trashSize,trashSize);
+  if (burger.x >= trashX && burger.y >= trashY){
+    burger.x = width / 2;
+    burger.y =  100;
+  }
+}
 // Roger:
 // 1. inventory
 // 2. minimum distance between foods
 // 3. burger - person interaction
 
 // Musawer:
-// 1. generic-ize the button class
+// 1. generic-ize the button class DONE
 // 2. garbage bin
 // 3. timer system
+// 4. person
