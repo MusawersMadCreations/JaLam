@@ -247,7 +247,7 @@ class Button {
 
     this.textSize = textSize;
     this.textX = textX;
-    this.textX = textY;
+    this.textY = textY;
   }
   display() {
     fill(this.r, this.g, this.b);
