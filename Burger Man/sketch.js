@@ -46,7 +46,7 @@ function setup() {
 
   state = "startScreen";
 
-  gameTimer = new Timer(7000, width/2 - 50, 100);
+  gameTimer = new Timer(7000, width - 80, 275);
 
   button = new Button("START", width / 2 - 175, height / 2 + 80, 320, 80, [51, 25, 0], [126, 74, 16], [255, 178, 102], 30, 160, 75);
 
@@ -312,15 +312,18 @@ class Timer {
     this.finishTime = this.startTime + this.waitTime;
     this.timerIsDone = false;
 
-    this.text = millis()
     this.textX = textX;
     this.textY = textY;
   }
 
   display(){
-    // rect(x,y,w,h,[tl],[tr],[br],[bl]);
-    String(this.text)
-    text(this.text,this.textX,this.textY);
+    textSize(50);
+    text("Time",this.textX - 5 ,this.textY - 90)
+    fill(51, 25, 0);
+    rect(this.textX - 80,this.textY - 85, 155,100,25);
+    fill(255, 178, 102);
+    textSize(100);
+    text(int(millis()/1000),this.textX,this.textY);
 
   }
 
@@ -455,6 +458,7 @@ function startScreen() {
 }
 
 function gameLoop() {
+  background(255);
   if (state === "startScreen") {
     startScreen();
     button.display();
@@ -475,9 +479,12 @@ function gameLoop() {
 }
 
 function trash(){
-  trashX = width - 160;
-  trashY = height/2;
-  trashSize = 155;
+  let trashX = width - 160;
+  let trashY = height/2;
+  let trashSize = 155;
+  fill(126, 74, 16);
+  textSize(50);
+  text("Trash", trashX + 75 ,trashY - 10);
   fill(62,37,15);
   rect(trashX ,trashY ,trashSize,trashSize,25);
   image(trashImg,trashX,trashY,trashSize,trashSize);
