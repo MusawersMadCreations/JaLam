@@ -2,9 +2,12 @@
 // Roger Lam
 // April 20, 2018
 
+let gameTimer;
+
 let burger, burgerImg;
 
 let person;
+let orderIsDone;
 
 let tableImg;
 
@@ -43,6 +46,8 @@ function setup() {
 
   state = "startScreen";
 
+  gameTimer = new Timer(7000, width/2 - 50, 100);
+
   button = new Button("Start", width / 2 - 175, height / 2 + 70, 300, 80, [51, 25, 0], [126, 74, 1], [255, 178, 102], 100, 147, 75);
 
   cellSize = windowHeight / 8;
@@ -50,6 +55,7 @@ function setup() {
   burger = new Burger(width / 2, 100, 80, 80);
 
   // person = new Person();
+  orderIsDone = false; // if person has been fulfilled in time
 
   foodWidth = 80;
   foodHeight = 80;
@@ -74,6 +80,15 @@ function setup() {
 // the function that loops as fast as fps
 function draw() {
   gameLoop();
+  gameTimer.display();
+  if (gameTimer.isDone()) {
+   print("It Works")
+   //state = "gameOver";
+  if (orderIsDone) { // WHEN GUY WHO ORDERS RECIEVES HIS ORDER
+    gameTimer.reset(7000);
+    // makeOrder()       // make new order
+    }
+  }
 }
 
 // the burger class
@@ -222,6 +237,42 @@ function collisionDetection() {
   }
 }
 
+class Timer {
+  constructor(waitTime,textX,textY) {
+    this.waitTime = waitTime;
+    this.startTime = millis();
+    this.finishTime = this.startTime + this.waitTime;
+    this.timerIsDone = false;
+
+    this.text = millis()
+    this.textX = textX;
+    this.textY = textY;
+  }
+
+  display(){
+    // rect(x,y,w,h,[tl],[tr],[br],[bl]);
+    String(this.text)
+    text(this.text,this.textX,this.textY);
+
+  }
+
+  reset(newWaitTime) {
+    this.waitTime = newWaitTime;
+    this.startTime = millis();
+    this.finishTime = this.startTime + this.waitTime;
+    this.timerIsDone = false;
+  }
+
+  isDone() {
+    if (millis() >= this.finishTime) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+}
+
 // the button class
 class Button {
   constructor(text, x, y, buttonWidth, buttonHeight, [r, g, b], [hoverR, hoverG, hoverB], [textR, textG, textB], textSize, textX, textY) {
@@ -356,16 +407,15 @@ function gameLoop() {
     collisionDetection();
     displayInventoryBar();
     newFoodLocations();
-
   }
 }
 
 function trash(){
-  trashX = width - 180;
+  trashX = width - 160;
   trashY = height/2;
-  trashSize = 180;
+  trashSize = 155;
   fill(62,37,15);
-  rect(trashX ,trashY ,180,180,25);
+  rect(trashX ,trashY ,trashSize,trashSize,25);
   image(trashImg,trashX,trashY,trashSize,trashSize);
   if (burger.x >= trashX && burger.y >= trashY){
     burger.x = width / 2;
@@ -379,6 +429,6 @@ function trash(){
 
 // Musawer:
 // 1. generic-ize the button class DONE
-// 2. garbage bin
+// 2. garbage bin 75% DONE
 // 3. timer system
 // 4. person
