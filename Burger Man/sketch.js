@@ -4,8 +4,9 @@
 
 let burger, burgerImg;
 
-let person;
+let person, personImg;
 let orderIsDone;
+let gameTimer;
 
 let tableImg;
 
@@ -13,7 +14,6 @@ let lettuce, tomato, cheese, ketchup, onion;
 let lettuceImg, tomatoImg, cheeseImg, ketchupImg, onionImg, trashImg;
 let lettuceTaken, tomatoTaken, cheeseTaken, ketchupTaken, onionTaken;
 let lettuceD, tomatoD, cheeseD, ketchupD, onionD;
-let foodList;
 let foodWidth, foodHeight;
 
 let inventory;
@@ -23,8 +23,6 @@ let cellSize;
 
 let state;
 let button;
-
-let sexyBeast;
 
 // preloads our images and audio
 function preload() {
@@ -36,7 +34,7 @@ function preload() {
   burgerImg = loadImage("assets/images/burger.png");
   tableImg = loadImage("assets/images/table.png");
   trashImg = loadImage("assets/images/trash.png");
-  sexyBeast = loadImage("assets/images/d.png");
+  personImg = loadImage("assets/images/pacMan.png");
 }
 
 // executes once after preload
@@ -45,7 +43,7 @@ function setup() {
 
   state = "startScreen";
 
-  gameTimer = new Timer(7000, width/2 - 50, 100);
+  gameTimer = new Timer(7000, width / 2 - 50, 100);
 
   button = new Button("START", width / 2 - 175, height / 2 + 80, 320, 80, [51, 25, 0], [126, 74, 16], [255, 178, 102], 30, 160, 75);
 
@@ -53,7 +51,8 @@ function setup() {
 
   burger = new Burger(width / 2, 100, 80, 80);
 
-  // person = new Person();
+  person = new Person(680, 630, 130, 130);
+
   orderIsDone = false; // if person has been fulfilled in time
 
   foodWidth = 80;
@@ -61,12 +60,11 @@ function setup() {
 
   radius = foodWidth / 2;
 
-  lettuce = new Lettuce(random(cellSize * 1.5, windowWidth - cellSize * 2), random(cellSize * 1.5, windowHeight - cellSize * 2), foodWidth, foodHeight);
-  tomato = new Tomato(random(cellSize * 1.5, windowWidth - cellSize * 2), random(cellSize * 1.5, windowHeight - cellSize * 2), foodWidth, foodHeight);
-  cheese = new Cheese(random(cellSize * 1.5, windowWidth - cellSize * 2), random(cellSize * 1.5, windowHeight - cellSize * 2), foodWidth, foodHeight);
-  ketchup = new Ketchup(random(cellSize * 1.5, windowWidth - cellSize * 2), random(cellSize * 1.5, windowHeight - cellSize * 3), foodWidth, foodHeight + 70);
-  onion = new Onions(random(cellSize * 1.5, windowWidth - cellSize * 2), random(cellSize * 1.5, windowHeight - cellSize * 2), foodWidth, foodHeight);
-  foodList = [lettuce, tomato, cheese, ketchup, onion];
+  lettuce = new Lettuce(random(120, 500), random(80, 220), foodWidth, foodHeight);
+  tomato = new Tomato(random(120, 500), random(300, 450), foodWidth, foodHeight);
+  cheese = new Cheese(random(500, 800), random(300, 450), foodWidth, foodHeight);
+  ketchup = new Ketchup(random(800, 1200), random(300, 450), foodWidth, foodHeight + 60);
+  onion = new Onions(random(800, 1200), random(80, 320), foodWidth, foodHeight);
 
   inventory = createInventoryBar();
 
@@ -82,13 +80,17 @@ function draw() {
   gameLoop();
   gameTimer.display();
   if (gameTimer.isDone()) {
-   print("It Works")
-   //state = "gameOver";
-  if (orderIsDone) { // WHEN GUY WHO ORDERS RECIEVES HIS ORDER
-    gameTimer.reset(7000);
-    // makeOrder()       // make new order
+    // print("It Works");
+    //state = "gameOver";
+    if (orderIsDone) { // WHEN GUY WHO ORDERS RECIEVES HIS ORDER
+      gameTimer.reset(7000);
+      // makeOrder()       // make new order
     }
   }
+}
+
+function mouseClicked() {
+  print([mouseX, mouseY]);
 }
 
 // the burger class
@@ -105,17 +107,40 @@ class Burger {
   }
 
   movement() {
-    if (keyIsDown(UP_ARROW)) {
-      this.y -= 5;
+    if (this.y > 30) {
+      if (keyIsDown(UP_ARROW)) {
+        this.y -= 5;
+      }
     }
-    if (keyIsDown(DOWN_ARROW)) {
+    else {
       this.y += 5;
     }
-    if (keyIsDown(LEFT_ARROW)) {
-      this.x -= 5;
+
+    if (this.y < 510) {
+      if (keyIsDown(DOWN_ARROW)) {
+        this.y += 5;
+      }
     }
-    if (keyIsDown(RIGHT_ARROW)) {
+    else {
+      this.y -= 5;
+    }
+
+    if (this.x > 120) {
+      if (keyIsDown(LEFT_ARROW)) {
+        this.x -= 5;
+      }
+    }
+    else {
       this.x += 5;
+    }
+
+    if (this.x < 1280) {
+      if (keyIsDown(RIGHT_ARROW)) {
+        this.x += 5;
+      }
+    }
+    else {
+      this.x -= 5;
     }
   }
 }
@@ -127,6 +152,9 @@ class Person {
     this.y = y;
     this.w = width;
     this.h = height;
+  }
+  display() {
+    image(personImg, this.x, this.y, this.w, this.h);
   }
 }
 
@@ -141,21 +169,6 @@ class Lettuce {
   spawn() {
     image(lettuceImg, this.x, this.y, this.w, this.h);
   }
-
-  checkDist() {
-    // foodList = [lettuce, tomato]
-    this.x = randomXLocation();
-    this.y = randomYLocation();
-    for (let i = 0; i < foodList.length; i++) {
-      if (foodList[i] !== this) {
-        if (dist(this.x, this.y, foodList[i].x, foodList[i].y) < 200) {
-          this.x = randomXLocation();
-          this.y = randomYLocation();
-        }
-      }
-    }
-    lettuceTaken = false;
-  }
 }
 
 // the tomato class
@@ -168,19 +181,6 @@ class Tomato {
   }
   spawn() {
     image(tomatoImg, this.x, this.y, this.w, this.h);
-  }
-  checkDist() {
-    this.x = randomXLocation();
-    this.y = randomYLocation();
-    for (let i = 0; i < foodList.length; i++) {
-      if (foodList[i] !== this) {
-        if (dist(this.x, this.y, foodList[i].x, foodList[i].y) < 200) {
-          this.x = randomXLocation();
-          this.y = randomYLocation();
-        }
-      }
-    }
-    tomatoTaken = false;
   }
 }
 
@@ -195,19 +195,6 @@ class Cheese {
   spawn() {
     image(cheeseImg, this.x, this.y, this.w, this.h);
   }
-  checkDist() {
-    this.x = randomXLocation();
-    this.y = randomYLocation();
-    for (let i = 0; i < foodList.length; i++) {
-      if (foodList[i] !== this) {
-        if (dist(this.x, this.y, foodList[i].x, foodList[i].y) < 200) {
-          this.x = randomXLocation();
-          this.y = randomYLocation();
-        }
-      }
-    }
-    cheeseTaken = false;
-  }
 }
 
 // the ketchup class
@@ -221,19 +208,6 @@ class Ketchup {
   spawn() {
     image(ketchupImg, this.x, this.y, this.w, this.h);
   }
-  checkDist() {
-    this.x = randomXLocation();
-    this.y = randomYLocation();
-    for (let i = 0; i < foodList.length; i++) {
-      if (foodList[i] !== this) {
-        if (dist(this.x, this.y, foodList[i].x, foodList[i].y) < 200) {
-          this.x = randomXLocation();
-          this.y = randomYLocation();
-        }
-      }
-    }
-    ketchupTaken = false;
-  }
 }
 
 // the onions class
@@ -246,19 +220,6 @@ class Onions {
   }
   spawn() {
     image(onionImg, this.x, this.y, this.w, this.h);
-  }
-  checkDist() {
-    this.x = randomXLocation();
-    this.y = randomYLocation();
-    for (let i = 0; i < foodList.length; i++) {
-      if (foodList[i] !== this) {
-        if (dist(this.x, this.y, foodList[i].x, foodList[i].y) < 200) {
-          this.x = randomXLocation();
-          this.y = randomYLocation();
-        }
-      }
-    }
-    onionTaken = false;
   }
 }
 
@@ -305,22 +266,19 @@ function collisionDetection() {
 }
 
 class Timer {
-  constructor(waitTime,textX,textY) {
+  constructor(waitTime, textX, textY) {
     this.waitTime = waitTime;
     this.startTime = millis();
     this.finishTime = this.startTime + this.waitTime;
     this.timerIsDone = false;
 
-    this.text = millis()
     this.textX = textX;
     this.textY = textY;
   }
 
-  display(){
+  display() {
     // rect(x,y,w,h,[tl],[tr],[br],[bl]);
-    String(this.text)
-    text(this.text,this.textX,this.textY);
-
+    text(int(millis() / 1000), this.textX, this.textY);
   }
 
   reset(newWaitTime) {
@@ -333,8 +291,7 @@ class Timer {
   isDone() {
     if (millis() >= this.finishTime) {
       return true;
-    }
-    else {
+    } else {
       return false;
     }
   }
@@ -399,16 +356,7 @@ function createInventoryBar() {
 function displayInventoryBar() {
   fill(149, 86, 25);
   for (let i = 1; i < inventory.length + 2; i++) {
-    if (inventory[i - 1] === "empty" && lettuceTaken === true) {
-      rect(10, i * cellSize, cellSize, cellSize);
-      // lettuceTaken = false;
-      // inventory[i - 1] = "lettuce";
-    }
     rect(10, i * cellSize, cellSize, cellSize);
-    // inventory.push(0);
-    // if (inventory[i - 1] === "lettuce") {
-    //   image(lettuceImg, 10, i * cellSize, cellSize, cellSize);
-    // }
   }
 }
 
@@ -416,30 +364,31 @@ function displayInventoryBar() {
 // burger then picks up onion, the onion gets assigned the second square
 // if square "empty", allow food to get assigned to square
 
-function randomXLocation() {
-  return random(cellSize * 1.5, windowWidth - cellSize * 2.5);
-}
-
-function randomYLocation() {
-  return random(cellSize *1.25, windowHeight - cellSize * 3);
-}
-
 function newFoodLocations() {
   if (lettuceTaken === true) {
-    lettuce.checkDist();
-    // lettuceTaken = false;
+    lettuce.x = random(120, 500);
+    lettuce.y = random(80, 220);
+    lettuceTaken = false;
   }
   if (tomatoTaken === true) {
-    tomato.checkDist();
+    tomato.x = random(120, 500);
+    tomato.y = random(300, 450);
+    tomatoTaken = false;
   }
   if (cheeseTaken === true) {
-    cheese.checkDist();
+    cheese.x = random(500, 800);
+    cheese.y = random(300, 450);
+    cheeseTaken = false;
   }
   if (ketchupTaken === true) {
-    ketchup.checkDist();
+    ketchup.x = random(800, 1200);
+    ketchup.y = random(300, 450);
+    ketchupTaken = false;
   }
   if (onionTaken === true) {
-    onion.checkDist();
+    onion.x = random(800, 1200);
+    onion.y = random(80, 320);
+    onionTaken = false;
   }
 }
 
@@ -462,9 +411,9 @@ function gameLoop() {
     }
   } else if (state === "game") {
     image(tableImg, 0, 0, width, height);
-    // image(sexyBeast, 0, 0, width, height);
     spawnFood();
     trash();
+    person.display();
     burger.display();
     burger.movement();
     collisionDetection();
@@ -473,26 +422,24 @@ function gameLoop() {
   }
 }
 
-function trash(){
-  trashX = width - 160;
-  trashY = height/2;
-  trashSize = 155;
-  fill(62,37,15);
-  rect(trashX ,trashY ,trashSize,trashSize,25);
-  image(trashImg,trashX,trashY,trashSize,trashSize);
-  if (burger.x >= trashX && burger.y >= trashY){
+function trash() {
+  let trashX = width - 160;
+  let trashY = height / 2;
+  let trashSize = 155;
+  fill(62, 37, 15);
+  rect(trashX, trashY, trashSize, trashSize, 25);
+  image(trashImg, trashX, trashY, trashSize, trashSize);
+  if (burger.x >= trashX && burger.y >= trashY) {
     burger.x = width / 2;
-    burger.y =  100;
+    burger.y = 100;
   }
 }
 
 // Roger:
 // 1. inventory
-// 2. minimum distance between foods
 // 3. burger - person interaction
 
 // Musawer:
-// 1. generic-ize the button class DONE
 // 2. garbage bin 75% DONE
 // 3. timer system
 // 4. person
