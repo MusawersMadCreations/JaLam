@@ -2,7 +2,7 @@
 // Musawer and Roger
 // April 20, 2018
 
-// Musawer's contribution: start screen, timer, trash, class creation, game loop creation
+// Musawer's contribution: start screen, timer, trash, class creation, game loop creation, table
 // Roger's contribution: inventory, burger movement, collision detection, food spawn
 
 let burger, burgerImg;
@@ -122,6 +122,8 @@ class Burger {
       if (keyIsDown(DOWN_ARROW)) {
         this.y += 5;
       }
+    } else if (this.x > 660 && this.x < 760 && keyIsDown(DOWN_ARROW)) {
+      this.y += 5;
     } else {
       this.y -= 5;
     }
@@ -138,7 +140,11 @@ class Burger {
       if (keyIsDown(RIGHT_ARROW)) {
         this.x += 5;
       }
-    } else {
+    }
+    else if (this.y > height / 2 - 45  && this.y < height / 2 + 105 && keyIsDown(RIGHT_ARROW)) {
+      this.x += 5;
+    }
+    else {
       this.x -= 5;
     }
   }
@@ -434,17 +440,19 @@ function trash() {
   rectMode(CORNER);
   rect(trashX, trashY, trashSize, trashSize, 25);
   image(trashImg, trashX, trashY, trashSize, trashSize);
-  if (burger.x >= trashX && burger.y >= trashY) {
+  if (burger.x >= trashX && burger.y >= trashY - 45) {
     burger.x = width / 2;
     burger.y = 100;
   }
 }
+
+// give each food a number from 1 to 5
+// if a foodTaken is true, create its' list and add one of itself to it, and display the image of
+// it with how many there is of it in one of earliest open inventory slot
 
 // Roger:
 // 1. inventory
 // 3. burger - person interaction
 
 // Musawer:
-// 2. garbage bin 75% DONE
 // 3. timer system
-// 4. person
