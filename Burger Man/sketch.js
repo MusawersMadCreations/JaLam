@@ -364,6 +364,52 @@ function displayInventoryBar() {
   fill(149, 86, 25);
   for (let i = 1; i < inventory.length + 2; i++) {
     rect(10, i * cellSize, cellSize, cellSize);
+    // if (inventory[i] === "lettuce") {
+    // ROGER WILL FINISH TONIGHT
+    // }
+  }
+}
+
+function alterInventoryBar() {
+  if (lettuceTaken === true) {
+    for (let i = 0; i < inventory.length; i++) {
+      if (inventory[i] === "empty") {
+        inventory[i] = "lettuce";
+        break;
+      }
+    }
+  }
+  if (tomatoTaken === true) {
+    for (let i = 0; i < inventory.length; i++) {
+      if (inventory[i] === "empty") {
+        inventory[i] = "tomato";
+        break;
+      }
+    }
+  }
+  if (cheeseTaken === true) {
+    for (let i = 0; i < inventory.length; i++) {
+      if (inventory[i] === "empty") {
+        inventory[i] = "cheese";
+        break;
+      }
+    }
+  }
+  if (ketchupTaken === true) {
+    for (let i = 0; i < inventory.length; i++) {
+      if (inventory[i] === "empty") {
+        inventory[i] = "ketchup";
+        break;
+      }
+    }
+  }
+  if (onionTaken === true) {
+    for (let i = 0; i < inventory.length; i++) {
+      if (inventory[i] === "empty") {
+        inventory[i] = "onion";
+        break;
+      }
+    }
   }
 }
 
@@ -375,26 +421,31 @@ function newFoodLocations() {
   if (lettuceTaken === true) {
     lettuce.x = random(120, 500);
     lettuce.y = random(80, 220);
+    alterInventoryBar();
     lettuceTaken = false;
   }
   if (tomatoTaken === true) {
     tomato.x = random(120, 500);
     tomato.y = random(300, 450);
+    alterInventoryBar();
     tomatoTaken = false;
   }
   if (cheeseTaken === true) {
     cheese.x = random(500, 800);
     cheese.y = random(300, 450);
+    alterInventoryBar();
     cheeseTaken = false;
   }
   if (ketchupTaken === true) {
     ketchup.x = random(800, 1200);
     ketchup.y = random(300, 450);
+    alterInventoryBar();
     ketchupTaken = false;
   }
   if (onionTaken === true) {
     onion.x = random(800, 1200);
     onion.y = random(80, 320);
+    alterInventoryBar();
     onionTaken = false;
   }
 }
@@ -406,6 +457,22 @@ function startScreen() {
     textSize(100);
     fill(51, 25, 0);
     text("EAT EAT REVOLUTION", width / 2, height / 2);
+  }
+}
+
+function trash() {
+  let trashX = width - 153;
+  let trashY = height / 2;
+  let trashSize = 155;
+  fill(62, 37, 15);
+  textSize(50);
+  text("Trash", trashX + 75, trashY - 10);
+  rectMode(CORNER);
+  rect(trashX, trashY, trashSize, trashSize, 25);
+  image(trashImg, trashX, trashY, trashSize, trashSize);
+  if (burger.x >= trashX && burger.y >= trashY - 45) {
+    burger.x = width / 2;
+    burger.y = 100;
   }
 }
 
@@ -427,22 +494,6 @@ function gameLoop() {
     collisionDetection();
     displayInventoryBar();
     newFoodLocations();
-  }
-}
-
-function trash() {
-  let trashX = width - 153;
-  let trashY = height / 2;
-  let trashSize = 155;
-  fill(62, 37, 15);
-  textSize(50);
-  text("Trash", trashX + 75, trashY - 10);
-  rectMode(CORNER);
-  rect(trashX, trashY, trashSize, trashSize, 25);
-  image(trashImg, trashX, trashY, trashSize, trashSize);
-  if (burger.x >= trashX && burger.y >= trashY - 45) {
-    burger.x = width / 2;
-    burger.y = 100;
   }
 }
 
