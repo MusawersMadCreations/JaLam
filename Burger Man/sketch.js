@@ -17,6 +17,7 @@ let lettuce, tomato, cheese, ketchup, onion;
 let lettuceImg, tomatoImg, cheeseImg, ketchupImg, onionImg, trashImg;
 let lettuceTaken, tomatoTaken, cheeseTaken, ketchupTaken, onionTaken;
 let lettuceD, tomatoD, cheeseD, ketchupD, onionD;
+let lettuceCount, tomatoCount, cheeseCount, ketchupCount, onionCount;
 let foodWidth, foodHeight;
 
 let inventory;
@@ -76,6 +77,12 @@ function setup() {
   cheeseTaken = false;
   ketchupTaken = false;
   onionTaken = false;
+
+  lettuceCount = 0;
+  tomatoCount = 0;
+  cheeseCount = 0;
+  ketchupCount = 0;
+  onionCount = 0;
 }
 
 // the function that loops as fast as fps
@@ -140,11 +147,9 @@ class Burger {
       if (keyIsDown(RIGHT_ARROW)) {
         this.x += 5;
       }
-    }
-    else if (this.y > height / 2 - 45  && this.y < height / 2 + 105 && keyIsDown(RIGHT_ARROW)) {
+    } else if (this.y > height / 2 - 45 && this.y < height / 2 + 105 && keyIsDown(RIGHT_ARROW)) {
       this.x += 5;
-    }
-    else {
+    } else {
       this.x -= 5;
     }
   }
@@ -161,6 +166,7 @@ class Person {
   display() {
     image(personImg, this.x, this.y, this.w, this.h);
   }
+
 }
 
 // the lettuce class
@@ -250,22 +256,27 @@ function collisionDetection() {
   // if touched, sets the "food touched" state to true, otherwise the "food touched" is false
   if (lettuceD < radius * 1.2) {
     lettuceTaken = true;
+    lettuceCount += 1;
     // inventory.unshift("lettuce");
   }
   if (tomatoD < radius * 1.2) {
     tomatoTaken = true;
+    tomatoCount += 1;
     // inventory.unshift("tomato");
   }
   if (cheeseD < radius * 1.2) {
     cheeseTaken = true;
+    cheeseCount += 1;
     // inventory.unshift("cheese");
   }
   if (ketchupD < radius * 1.2) {
     ketchupTaken = true;
+    ketchupCount += 1;
     // inventory.unshift("ketchup");
   }
   if (onionD < radius * 1.2) {
     onionTaken = true;
+    onionCount += 1;
     // inventory.unshift("onion");
   }
 }
@@ -362,11 +373,45 @@ function createInventoryBar() {
 
 function displayInventoryBar() {
   fill(149, 86, 25);
-  for (let i = 1; i < inventory.length + 2; i++) {
+  for (let i = 1; i < inventory.length + 1; i++) {
     rect(10, i * cellSize, cellSize, cellSize);
-    // if (inventory[i] === "lettuce") {
-    // ROGER WILL FINISH TONIGHT
-    // }
+  }
+  for (let j = 0; j < inventory.length; j++) {
+    textSize(28);
+    fill("black");
+    if (inventory[j] === "lettuce") {
+      image(lettuceImg, 10, j * cellSize + cellSize, cellSize * 0.75, cellSize * 0.75);
+      text(lettuceCount, 75, j * cellSize + cellSize * 2 - 10);
+      break;
+    }
+  }
+  for (let j = 0; j < inventory.length; j++) {
+    if (inventory[j] === "tomato") {
+      image(tomatoImg, 10, j * cellSize + cellSize, cellSize * 0.75, cellSize * 0.75);
+      text(tomatoCount, 75, j * cellSize + cellSize * 2 - 10);
+      break;
+    }
+  }
+  for (let j = 0; j < inventory.length; j++) {
+    if (inventory[j] === "ketchup") {
+      image(ketchupImg, 10, j * cellSize + cellSize, cellSize * 0.75, cellSize * 0.75);
+      text(ketchupCount, 75, j * cellSize + cellSize * 2 - 10);
+      break;
+    }
+  }
+  for (let j = 0; j < inventory.length; j++) {
+    if (inventory[j] === "cheese") {
+      image(cheeseImg, 10, j * cellSize + cellSize, cellSize * 0.75, cellSize * 0.75);
+      text(cheeseCount, 75, j * cellSize + cellSize * 2 - 10);
+      break;
+    }
+  }
+  for (let j = 0; j < inventory.length; j++) {
+    if (inventory[j] === "onion") {
+      image(onionImg, 10, j * cellSize + cellSize, cellSize * 0.75, cellSize * 0.75);
+      text(onionCount, 75, j * cellSize + cellSize * 2 - 10);
+      break;
+    }
   }
 }
 
@@ -374,6 +419,9 @@ function alterInventoryBar() {
   if (lettuceTaken === true) {
     for (let i = 0; i < inventory.length; i++) {
       if (inventory[i] === "empty") {
+        if (inventory.includes("lettuce") === true) {
+          break;
+        }
         inventory[i] = "lettuce";
         break;
       }
@@ -382,6 +430,9 @@ function alterInventoryBar() {
   if (tomatoTaken === true) {
     for (let i = 0; i < inventory.length; i++) {
       if (inventory[i] === "empty") {
+        if (inventory.includes("tomato") === true) {
+          break;
+        }
         inventory[i] = "tomato";
         break;
       }
@@ -390,6 +441,9 @@ function alterInventoryBar() {
   if (cheeseTaken === true) {
     for (let i = 0; i < inventory.length; i++) {
       if (inventory[i] === "empty") {
+        if (inventory.includes("cheese") === true) {
+          break;
+        }
         inventory[i] = "cheese";
         break;
       }
@@ -398,6 +452,9 @@ function alterInventoryBar() {
   if (ketchupTaken === true) {
     for (let i = 0; i < inventory.length; i++) {
       if (inventory[i] === "empty") {
+        if (inventory.includes("ketchup") === true) {
+          break;
+        }
         inventory[i] = "ketchup";
         break;
       }
@@ -406,16 +463,15 @@ function alterInventoryBar() {
   if (onionTaken === true) {
     for (let i = 0; i < inventory.length; i++) {
       if (inventory[i] === "empty") {
+        if (inventory.includes("onion") === true) {
+          break;
+        }
         inventory[i] = "onion";
         break;
       }
     }
   }
 }
-
-// if burger picks up lettuce, the lettuce gets assigned the first square
-// burger then picks up onion, the onion gets assigned the second square
-// if square "empty", allow food to get assigned to square
 
 function newFoodLocations() {
   if (lettuceTaken === true) {
@@ -473,7 +529,17 @@ function trash() {
   if (burger.x >= trashX && burger.y >= trashY - 45) {
     burger.x = width / 2;
     burger.y = 100;
+    inventory = createInventoryBar();
+    resetFoodCounts();
   }
+}
+
+function resetFoodCounts() {
+  lettuceCount = 0;
+  tomatoCount = 0;
+  cheeseCount = 0;
+  ketchupCount = 0;
+  onionCount = 0;
 }
 
 function gameLoop() {
@@ -497,13 +563,8 @@ function gameLoop() {
   }
 }
 
-// give each food a number from 1 to 5
-// if a foodTaken is true, create its' list and add one of itself to it, and display the image of
-// it with how many there is of it in one of earliest open inventory slot
-
 // Roger:
-// 1. inventory
-// 3. burger - person interaction
+// burger - person interaction
 
 // Musawer:
-// 3. timer system
+// timer system
