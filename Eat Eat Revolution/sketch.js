@@ -18,6 +18,7 @@ let lettuceImg, tomatoImg, cheeseImg, ketchupImg, onionImg, trashImg;
 let lettuceTaken, tomatoTaken, cheeseTaken, ketchupTaken, onionTaken;
 let lettuceD, tomatoD, cheeseD, ketchupD, onionD;
 let lettuceCount, tomatoCount, cheeseCount, ketchupCount, onionCount;
+let lettuceRequest, tomatoRequest, cheeseRequest, ketchupRequest, onionRequest;
 let foodWidth, foodHeight;
 
 let inventory;
@@ -27,6 +28,10 @@ let cellSize;
 
 let state;
 let button;
+
+let trashX;
+let trashY;
+let trashSize;
 
 // preloads our images and audio
 function preload() {
@@ -56,6 +61,7 @@ function setup() {
   burger = new Burger(width / 2, 100, 80, 80);
 
   person = new Person(680, 630, 130, 130);
+  person.randomBurgerRequest();
 
   orderIsDone = false; // if person has been fulfilled in time
 
@@ -64,11 +70,11 @@ function setup() {
 
   radius = foodWidth / 2;
 
-  lettuce = new Lettuce(random(120, 500), random(80, 220), foodWidth, foodHeight);
-  tomato = new Tomato(random(120, 500), random(300, 450), foodWidth, foodHeight);
-  cheese = new Cheese(random(500, 800), random(300, 450), foodWidth, foodHeight);
-  ketchup = new Ketchup(random(800, 1200), random(300, 450), foodWidth, foodHeight + 60);
-  onion = new Onions(random(800, 1200), random(80, 320), foodWidth, foodHeight);
+  lettuce = new Lettuce(random(125, windowWidth - 300), random(60, 550), foodWidth, foodHeight);
+  tomato = new Tomato(random(125, windowWidth - 300), random(60, 550), foodWidth, foodHeight);
+  cheese = new Cheese(random(125, windowWidth - 300), random(60, 550), foodWidth, foodHeight);
+  ketchup = new Ketchup(random(125, windowWidth - 300), random(60, 500), foodWidth, foodHeight + 60);
+  onion = new Onions(random(125, windowWidth - 300), random(60, 550), foodWidth, foodHeight);
 
   inventory = createInventoryBar();
 
@@ -166,7 +172,13 @@ class Person {
   display() {
     image(personImg, this.x, this.y, this.w, this.h);
   }
-
+  randomBurgerRequest() {
+    lettuceRequest = int(random(4));
+    tomatoRequest = int(random(4));
+    ketchupRequest = int(random(4));
+    cheeseRequest = int(random(4));
+    onionRequest = int(random(4));
+  }
 }
 
 // the lettuce class
@@ -257,27 +269,29 @@ function collisionDetection() {
   if (lettuceD < radius * 1.2) {
     lettuceTaken = true;
     lettuceCount += 1;
-    // inventory.unshift("lettuce");
   }
   if (tomatoD < radius * 1.2) {
     tomatoTaken = true;
     tomatoCount += 1;
-    // inventory.unshift("tomato");
   }
   if (cheeseD < radius * 1.2) {
     cheeseTaken = true;
     cheeseCount += 1;
-    // inventory.unshift("cheese");
   }
   if (ketchupD < radius * 1.2) {
     ketchupTaken = true;
     ketchupCount += 1;
-    // inventory.unshift("ketchup");
   }
   if (onionD < radius * 1.2) {
     onionTaken = true;
     onionCount += 1;
-    // inventory.unshift("onion");
+  }
+
+  if (dist(burger.x, burger.y, person.x + 10, person.y) < 65) {
+    burger.x = width / 2;
+    burger.y = 100;
+    inventory = createInventoryBar();
+    resetFoodCounts();
   }
 }
 
@@ -475,32 +489,32 @@ function alterInventoryBar() {
 
 function newFoodLocations() {
   if (lettuceTaken === true) {
-    lettuce.x = random(120, 500);
-    lettuce.y = random(80, 220);
+    lettuce.x = random(125, windowWidth - 300);
+    lettuce.y = random(60, 550);
     alterInventoryBar();
     lettuceTaken = false;
   }
   if (tomatoTaken === true) {
-    tomato.x = random(120, 500);
-    tomato.y = random(300, 450);
+    tomato.x = random(125, windowWidth - 300);
+    tomato.y = random(60, 550);
     alterInventoryBar();
     tomatoTaken = false;
   }
   if (cheeseTaken === true) {
-    cheese.x = random(500, 800);
-    cheese.y = random(300, 450);
+    cheese.x = random(125, windowWidth - 300);
+    cheese.y = random(60, 550);
     alterInventoryBar();
     cheeseTaken = false;
   }
   if (ketchupTaken === true) {
-    ketchup.x = random(800, 1200);
-    ketchup.y = random(300, 450);
+    ketchup.x = random(125, windowWidth - 300);
+    ketchup.y = random(60, 500);
     alterInventoryBar();
     ketchupTaken = false;
   }
   if (onionTaken === true) {
-    onion.x = random(800, 1200);
-    onion.y = random(80, 320);
+    onion.x = random(125, windowWidth - 300);
+    onion.y = random(60, 550);
     alterInventoryBar();
     onionTaken = false;
   }
@@ -517,9 +531,9 @@ function startScreen() {
 }
 
 function trash() {
-  let trashX = width - 153;
-  let trashY = height / 2;
-  let trashSize = 155;
+  trashX = width - 153;
+  trashY = height / 2;
+  trashSize = 155;
   fill(62, 37, 15);
   textSize(50);
   text("Trash", trashX + 75, trashY - 10);
@@ -542,6 +556,19 @@ function resetFoodCounts() {
   onionCount = 0;
 }
 
+function displayRequest() {
+  textSize(24);
+  fill("black");
+  text("GIMME " + lettuceRequest + " lettuce(s), " + tomatoRequest + " tomato(s)", person.x + 335, person.y + 55);
+  text(ketchupRequest + " ketchup(s), " + cheeseRequest + " cheese(s), and " + onionRequest + " onion(s)", person.x + 385, person.y + 95);
+}
+
+function matchRequestWithInventory() {
+  if (lettuceRequest === lettuceCount && tomatoRequest === tomatoCount && ketchupRequest === ketchupCount && cheeseRequest === cheeseCount && onionRequest === onionCount) {
+    print("yay");
+  }
+}
+
 function gameLoop() {
   background(255);
   if (state === "startScreen") {
@@ -560,6 +587,7 @@ function gameLoop() {
     collisionDetection();
     displayInventoryBar();
     newFoodLocations();
+    displayRequest();
   }
 }
 
