@@ -3,7 +3,7 @@
 // April 20, 2018
 
 // Musawer's contribution: start screen, timer, trash, class creation, game loop creation, table
-// Roger's contribution: inventory, burger movement, collision detection, food spawn
+// Roger's contribution: inventory, burger movement, collision detection, food spawn, game over, burger to person interaction, the person
 
 let burger, burgerImg;
 
@@ -33,6 +33,8 @@ let trashX;
 let trashY;
 let trashSize;
 
+let points;
+
 // preloads our images and audio
 function preload() {
   lettuceImg = loadImage("assets/images/lettuce.png");
@@ -52,7 +54,7 @@ function setup() {
 
   state = "startScreen";
 
-  gameTimer = new Timer(7000, width - 80, 175);
+  gameTimer = new Timer(7000, width - 80, 220);
 
   button = new Button("START", width / 2 - 175, height / 2 + 80, 320, 80, [51, 25, 0], [126, 74, 16], [255, 178, 102], 30, 160, 75);
 
@@ -89,20 +91,13 @@ function setup() {
   cheeseCount = 0;
   ketchupCount = 0;
   onionCount = 0;
+
+  points = 0;
 }
 
 // the function that loops as fast as fps
 function draw() {
   gameLoop();
-  gameTimer.display();
-  if (gameTimer.isDone()) {
-    // print("It Works");
-    //state = "gameOver";
-    if (orderIsDone) { // WHEN GUY WHO ORDERS RECIEVES HIS ORDER
-      gameTimer.reset(7000);
-      // makeOrder()       // make new order
-    }
-  }
 }
 
 function mouseClicked() {
@@ -246,55 +241,6 @@ class Onions {
   }
 }
 
-// function that spawns the food on the map
-function spawnFood() {
-  lettuce.spawn();
-  tomato.spawn();
-  cheese.spawn();
-  ketchup.spawn();
-  onion.spawn();
-}
-
-// burger to food collision detection
-function collisionDetection() {
-  // calculates distance between food and burger
-  lettuceD = dist(lettuce.x, lettuce.y, burger.x, burger.y);
-  tomatoD = dist(tomato.x, tomato.y, burger.x, burger.y);
-  cheeseD = dist(cheese.x, cheese.y, burger.x, burger.y);
-  ketchupD = dist(ketchup.x, ketchup.y, burger.x, burger.y);
-  onionD = dist(onion.x, onion.y, burger.x, burger.y);
-
-  // if the food to burger distance is less than their radius, they are touching
-  // if touched, sets the "food touched" state to true, otherwise the "food touched" is false
-  if (lettuceD < radius * 1.2) {
-    lettuceTaken = true;
-    lettuceCount += 1;
-  }
-  if (tomatoD < radius * 1.2) {
-    tomatoTaken = true;
-    tomatoCount += 1;
-  }
-  if (cheeseD < radius * 1.2) {
-    cheeseTaken = true;
-    cheeseCount += 1;
-  }
-  if (ketchupD < radius * 1.2) {
-    ketchupTaken = true;
-    ketchupCount += 1;
-  }
-  if (onionD < radius * 1.2) {
-    onionTaken = true;
-    onionCount += 1;
-  }
-
-  if (dist(burger.x, burger.y, person.x + 10, person.y) < 65) {
-    burger.x = width / 2;
-    burger.y = 100;
-    inventory = createInventoryBar();
-    resetFoodCounts();
-  }
-}
-
 class Timer {
   constructor(waitTime, textX, textY) {
     this.waitTime = waitTime;
@@ -307,8 +253,10 @@ class Timer {
   }
 
   display() {
-    textSize(100);
+    textSize(22);
     fill(126, 74, 16);
+    text("Time Available:", this.textX, this.textY - 40);
+    textSize(32);
     text(int(millis() / 1000), this.textX, this.textY);
   }
 
@@ -377,6 +325,73 @@ class Button {
   }
 }
 
+// function that spawns the food on the map
+function spawnFood() {
+  lettuce.spawn();
+  tomato.spawn();
+  cheese.spawn();
+  ketchup.spawn();
+  onion.spawn();
+}
+
+// burger to food collision detection
+function collisionDetection() {
+  // calculates distance between food and burger
+  lettuceD = dist(lettuce.x, lettuce.y, burger.x, burger.y);
+  tomatoD = dist(tomato.x, tomato.y, burger.x, burger.y);
+  cheeseD = dist(cheese.x, cheese.y, burger.x, burger.y);
+  ketchupD = dist(ketchup.x, ketchup.y, burger.x, burger.y);
+  onionD = dist(onion.x, onion.y, burger.x, burger.y);
+
+  // if the food to burger distance is less than their radius, they are touching
+  // if touched, sets the "food touched" state to true, otherwise the "food touched" is false
+  if (lettuceD < radius * 1.2) {
+    lettuceTaken = true;
+    lettuceCount += 1;
+  }
+  if (tomatoD < radius * 1.2) {
+    tomatoTaken = true;
+    tomatoCount += 1;
+  }
+  if (cheeseD < radius * 1.2) {
+    cheeseTaken = true;
+    cheeseCount += 1;
+  }
+  if (ketchupD < radius * 1.2) {
+    ketchupTaken = true;
+    ketchupCount += 1;
+  }
+  if (onionD < radius * 1.2) {
+    onionTaken = true;
+    onionCount += 1;
+  }
+}
+
+// function that checks what happens when burger gets eaten
+function burgerPersonInteraction() {
+  if (dist(burger.x, burger.y, person.x + 10, person.y) < 65 && matchRequestWithInventory() === true) {
+    addPointsAndReset();
+  }
+  else if (dist(burger.x, burger.y, person.x + 10, person.y) < 65) {
+    lose();
+  }
+}
+
+// if the request and inventory match up, then points increase
+function addPointsAndReset() {
+  burger.x = width / 2;
+  burger.y = 100;
+  inventory = createInventoryBar();
+  resetFoodCounts();
+  points += 100;
+}
+
+// if the request and the inventory do not match up, then you lose
+function lose() {
+  state = "gameOver";
+}
+
+// function that creates an empty inventory bar
 function createInventoryBar() {
   let newInventory = [];
   for (let i = 1; i < 6; i++) {
@@ -385,6 +400,7 @@ function createInventoryBar() {
   return newInventory;
 }
 
+// function that displays the inventory bar
 function displayInventoryBar() {
   fill(149, 86, 25);
   for (let i = 1; i < inventory.length + 1; i++) {
@@ -429,6 +445,7 @@ function displayInventoryBar() {
   }
 }
 
+// when any food is picked up, it alters the inventory list and the display inventory bar function reacts to draw the food picked up in the inventory
 function alterInventoryBar() {
   if (lettuceTaken === true) {
     for (let i = 0; i < inventory.length; i++) {
@@ -487,6 +504,7 @@ function alterInventoryBar() {
   }
 }
 
+// gives any food picked up a new location
 function newFoodLocations() {
   if (lettuceTaken === true) {
     lettuce.x = random(125, windowWidth - 300);
@@ -520,6 +538,7 @@ function newFoodLocations() {
   }
 }
 
+// function that displays the start screen
 function startScreen() {
   if (state === "startScreen") {
     image(tableImg, 0, 0, width, height);
@@ -530,6 +549,7 @@ function startScreen() {
   }
 }
 
+// function regarding all interaction with the trash can
 function trash() {
   trashX = width - 153;
   trashY = height / 2;
@@ -548,6 +568,7 @@ function trash() {
   }
 }
 
+// this changes the amount of foods picked up to zero, occurs when burger goes into trash
 function resetFoodCounts() {
   lettuceCount = 0;
   tomatoCount = 0;
@@ -556,6 +577,7 @@ function resetFoodCounts() {
   onionCount = 0;
 }
 
+// displays the request that the person asked for
 function displayRequest() {
   textSize(24);
   fill("black");
@@ -563,12 +585,21 @@ function displayRequest() {
   text(ketchupRequest + " ketchup(s), " + cheeseRequest + " cheese(s), and " + onionRequest + " onion(s)", person.x + 385, person.y + 95);
 }
 
+// checks if person request matches with the inventory
 function matchRequestWithInventory() {
   if (lettuceRequest === lettuceCount && tomatoRequest === tomatoCount && ketchupRequest === ketchupCount && cheeseRequest === cheeseCount && onionRequest === onionCount) {
-    print("yay");
+    return true;
   }
 }
 
+// function that displays the points on the side
+function displayPoints() {
+  textSize(32);
+  text("Points:", windowWidth - 100, 70);
+  text(points, windowWidth - 100, 100);
+}
+
+// the main game loop that wraps everything up nicely
 function gameLoop() {
   background(255);
   if (state === "startScreen") {
@@ -579,6 +610,15 @@ function gameLoop() {
     }
   } else if (state === "game") {
     image(tableImg, 0, 0, width, height);
+    gameTimer.display();
+    if (gameTimer.isDone()) {
+      // print("It Works");
+      //state = "gameOver";
+      if (orderIsDone) { // WHEN GUY WHO ORDERS RECIEVES HIS ORDER
+        gameTimer.reset(7000);
+        // makeOrder()       // make new order
+      }
+    }
     spawnFood();
     trash();
     person.display();
@@ -588,11 +628,15 @@ function gameLoop() {
     displayInventoryBar();
     newFoodLocations();
     displayRequest();
+    burgerPersonInteraction();
+    displayPoints();
+  }
+  else {
+    textSize(50);
+    text("you lost bro, pac man is a picky eater", 700, 400);
+    text("at least you got " + points + " points", 700, 480);
   }
 }
-
-// Roger:
-// burger - person interaction
 
 // Musawer:
 // timer system
