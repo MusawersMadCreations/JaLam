@@ -54,7 +54,7 @@ function setup() {
 
   state = "startScreen";
 
-  gameTimer = new Timer(7000, width - 80, 220);
+  gameTimer = new Timer(45000, width - 80, 220);
 
   button = new Button("START", width / 2 - 175, height / 2 + 80, 320, 80, [51, 25, 0], [126, 74, 16], [255, 178, 102], 30, 160, 75);
 
@@ -65,7 +65,6 @@ function setup() {
   person = new Person(680, 630, 130, 130);
   person.randomBurgerRequest();
 
-  orderIsDone = false; // if person has been fulfilled in time
 
   foodWidth = 80;
   foodHeight = 80;
@@ -98,10 +97,6 @@ function setup() {
 // the function that loops as fast as fps
 function draw() {
   gameLoop();
-}
-
-function mouseClicked() {
-  print([mouseX, mouseY]);
 }
 
 // the burger class
@@ -253,11 +248,16 @@ class Timer {
   }
 
   display() {
-    textSize(22);
-    fill(126, 74, 16);
-    text("Time Available:", this.textX, this.textY - 40);
-    textSize(32);
-    text(int(millis() / 1000), this.textX, this.textY);
+    rectMode(CORNER);
+    fill(255, 178, 102);
+    rect(trashX - 10, trashY - 250, trashSize + 7, trashSize, 25);
+    fill(0);
+    textSize(28);
+    text("45 SECOND", this.textX - 2, this.textY - 40);
+    text("TIMER:", this.textX, this.textY -10);
+    textSize(75);
+    text(int(millis() / 1000), this.textX, this.textY + 50);
+
   }
 
   reset(newWaitTime) {
@@ -580,6 +580,8 @@ function resetFoodCounts() {
 // displays the request that the person asked for
 function displayRequest() {
   textSize(24);
+  fill(55, 178, 102);
+  rect(width/2 + 15 , height - 120, 500,100,25);
   fill("black");
   text("GIMME " + lettuceRequest + " lettuce(s), " + tomatoRequest + " tomato(s)", person.x + 335, person.y + 55);
   text(ketchupRequest + " ketchup(s), " + cheeseRequest + " cheese(s), and " + onionRequest + " onion(s)", person.x + 385, person.y + 95);
@@ -612,11 +614,9 @@ function gameLoop() {
     image(tableImg, 0, 0, width, height);
     gameTimer.display();
     if (gameTimer.isDone()) {
-      // print("It Works");
-      //state = "gameOver";
+      state = "gameOver";
       if (orderIsDone) { // WHEN GUY WHO ORDERS RECIEVES HIS ORDER
-        gameTimer.reset(7000);
-        // makeOrder()       // make new order
+        gameTimer.reset(45000);
       }
     }
     spawnFood();
@@ -632,14 +632,10 @@ function gameLoop() {
     displayPoints();
   }
   else {
-    textSize(50);
-    text("you lost bro, pac man is a picky eater", 700, 400);
-    text("at least you got " + points + " points", 700, 480);
+    background(0);
+    textSize(75);
+    fill(255);
+    text("You lost bro, Pac Man is a picky eater.", width/2, 400);
+    text("At least you got " + points + " points", width/2, 500);
   }
 }
-<<<<<<< HEAD:Burger Man/sketch.js
-=======
-
-// Musawer:
-// timer system
->>>>>>> f65dae8e62daaeec7498d5b2c7a5695dee6a5c25:Eat Eat Revolution/sketch.js
