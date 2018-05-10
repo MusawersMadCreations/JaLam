@@ -54,7 +54,10 @@ function preload() {
   trashImg = loadImage("assets/images/trash.png");
   personImg = loadImage("assets/images/pacMan.png");
 
-
+  bgMusic = loadSound("assets/sounds/bgMusic.mp3");
+  foodPickupSound = loadSound("assets/sounds/foodPickupSound.mp3");
+  trashSound = loadSound("assets/sounds/trashSound.mp3");
+  personSound = loadSound("assets/sounds/personSound.mp3");
 }
 
 // executes once after preload
@@ -288,6 +291,7 @@ class Button {
 
   isClicked() {
     if (mouseIsPressed && mouseX >= this.leftSide && mouseX <= this.rightSide && mouseY >= this.topSide && mouseY <= this.bottomSide) {
+      bgMusic.loop();
       return true;
     } else {
       return false;
@@ -317,22 +321,27 @@ function collisionDetection() {
   // if touched, sets the "food touched" state to true, otherwise the "food touched" is false
   if (lettuceD < radius * 1.2) {
     lettuceTaken = true;
+    foodPickupSound.play();
     lettuceCount += 1;
   }
   if (tomatoD < radius * 1.2) {
     tomatoTaken = true;
+    foodPickupSound.play();
     tomatoCount += 1;
   }
   if (cheeseD < radius * 1.2) {
     cheeseTaken = true;
+    foodPickupSound.play();
     cheeseCount += 1;
   }
   if (ketchupD < radius * 1.2) {
     ketchupTaken = true;
+    foodPickupSound.play();
     ketchupCount += 1;
   }
   if (onionD < radius * 1.2) {
     onionTaken = true;
+    foodPickupSound.play();
     onionCount += 1;
   }
 }
@@ -340,8 +349,10 @@ function collisionDetection() {
 // function that checks what happens when burger gets eaten
 function burgerPersonInteraction() {
   if (dist(burger.x, burger.y, person.x + 10, person.y) < 65 && matchRequestWithInventory() === true) {
+    personSound.play();
     addPointsAndReset();
   } else if (dist(burger.x, burger.y, person.x + 10, person.y) < 65) {
+    personSound.play();
     wrongFoodLose();
   }
 }
@@ -533,6 +544,7 @@ function trash() {
     burger.x = width / 2;
     burger.y = 100;
     inventory = createInventoryBar();
+    trashSound.play();
     resetFoodCounts();
   }
 }
