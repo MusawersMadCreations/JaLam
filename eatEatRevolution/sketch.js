@@ -2,15 +2,13 @@
 // Musawer and Roger
 // April 20, 2018
 
-// Musawer's contribution: start screen, timer, trash, class creation, game loop creation, table
+// Musawer's contribution: start screen, trash, class creation, game loop creation, table
 // Roger's contribution: inventory, burger movement, collision detection, food spawn, game over, burger to person interaction, the person
 
 let burger, burgerImg;
 
 let person, personImg;
 let orderIsDone;
-let gameTimer;
-let tTime;
 
 let tableImg;
 
@@ -36,6 +34,14 @@ let trashSize;
 
 let points;
 
+let countdownTime;
+let currentTime;
+let timeUntilEnd;
+let secondPassed;
+let timeLeft;
+
+let bgMusic, foodPickupSound, trashSound, personSound;
+
 // preloads our images and audio
 function preload() {
   lettuceImg = loadImage("assets/images/lettuce.png");
@@ -47,6 +53,8 @@ function preload() {
   tableImg = loadImage("assets/images/table.png");
   trashImg = loadImage("assets/images/trash.png");
   personImg = loadImage("assets/images/pacMan.png");
+
+
 }
 
 // executes once after preload
@@ -54,9 +62,6 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
 
   state = "startScreen";
-
-  gameTimer = new Timer(45000, width - 80, 220);
-  tTime = - 50;
 
   button = new Button("START", width / 2 - 175, height / 2 + 80, 320, 80, [51, 25, 0], [126, 74, 16], [255, 178, 102], 30, 160, 75);
 
@@ -93,10 +98,14 @@ function setup() {
   onionCount = 0;
 
   points = 0;
+
+  countdownTime = 40000;
+  timeLeft = 40;
 }
 
 // the function that loops as fast as fps
 function draw() {
+  currentTime = millis();
   gameLoop();
 }
 
@@ -237,46 +246,6 @@ class Onions {
   }
 }
 
-class Timer {
-  constructor(waitTime, textX, textY) {
-    this.waitTime = waitTime;
-    this.startTime = millis();
-    this.finishTime = this.startTime + this.waitTime;
-    this.timerIsDone = false;
-
-    this.textX = textX;
-    this.textY = textY;
-  }
-
-  display() {
-    rectMode(CORNER);
-    fill(255, 178, 102);
-    rect(trashX - 10, trashY - 250, trashSize + 7, trashSize, 25);
-    fill(0);
-    textSize(22);
-    text("COUNTDOWN", this.textX - 2, this.textY - 40);
-    textSize(28);
-    text("TIMER:", this.textX, this.textY -10);
-    textSize(75);
-    text(abs(int(millis() / 1000 + tTime)), this.textX, this.textY + 50);
-
-  }
-
-  reset(newWaitTime) {
-    this.startTime = millis() + 15000;
-    this.finishTime = this.startTime + this.waitTime;
-    this.timerIsDone = false;
-  }
-
-  isDone() {
-    if (millis() >= this.finishTime) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-}
-
 // the button class
 class Button {
   constructor(text, x, y, buttonWidth, buttonHeight, [r, g, b], [hoverR, hoverG, hoverB], [textR, textG, textB], textSize, textX, textY) {
@@ -372,8 +341,7 @@ function collisionDetection() {
 function burgerPersonInteraction() {
   if (dist(burger.x, burger.y, person.x + 10, person.y) < 65 && matchRequestWithInventory() === true) {
     addPointsAndReset();
-  }
-  else if (dist(burger.x, burger.y, person.x + 10, person.y) < 65) {
+  } else if (dist(burger.x, burger.y, person.x + 10, person.y) < 65) {
     wrongFoodLose();
   }
 }
@@ -582,7 +550,7 @@ function resetFoodCounts() {
 function displayRequest() {
   textSize(24);
   fill(55, 178, 102);
-  rect(width/2 + 15 , height - 120, 500,100,25);
+  rect(width / 2 + 15, height - 120, 500, 100, 25);
   fill("black");
   text("GIMME " + lettuceRequest + " lettuce(s), " + tomatoRequest + " tomato(s)", person.x + 335, person.y + 55);
   text(ketchupRequest + " ketchup(s), " + cheeseRequest + " cheese(s), and " + onionRequest + " onion(s)", person.x + 385, person.y + 95);
@@ -592,6 +560,9 @@ function displayRequest() {
 function matchRequestWithInventory() {
   if (lettuceRequest === lettuceCount && tomatoRequest === tomatoCount && ketchupRequest === ketchupCount && cheeseRequest === cheeseCount && onionRequest === onionCount) {
     person.randomBurgerRequest();
+    spawnFood();
+    timeUntilEnd = currentTime + countdownTime;
+    timeLeft = 40;
     return true;
   }
 }
@@ -603,6 +574,25 @@ function displayPoints() {
   text(points, windowWidth - 100, 100);
 }
 
+// function that runs the timer
+function displayTimer() {
+  rectMode(CORNER);
+  fill(255, 178, 102);
+  rect(trashX - 10, trashY - 250, trashSize + 7, trashSize, 25);
+  fill(0);
+  textSize(22);
+  text("COUNTDOWN", trashX + 70, trashY - 215);
+  textSize(28);
+  text("TIMER:", trashX + 75, trashY - 185);
+  textSize(75);
+
+  if (millis() >= secondPassed) {
+    timeLeft -= 1;
+    secondPassed = currentTime + 1000;
+  }
+  text(timeLeft, trashX + 75, trashY - 115);
+}
+
 // the main game loop that wraps everything up nicely
 function gameLoop() {
   background(255);
@@ -610,22 +600,23 @@ function gameLoop() {
     startScreen();
     button.display();
     if (button.isClicked()) {
+      timeUntilEnd = currentTime + countdownTime;
+      secondPassed = currentTime + 1000;
       state = "game";
     }
   } else if (state === "game") {
-      image(tableImg, 0, 0, width, height);
-      gameTimer.display();
+    image(tableImg, 0, 0, width, height);
 
-    if (gameTimer.isDone()) {
+    // if the timer reaches the time until it should end, game over
+    if (millis() >= timeUntilEnd) {
       state = "gameOver";
-      if (orderIsDone) { // WHEN GUY WHO ORDERS RECIEVES HIS ORDER
-        gameTimer.reset(45000);
-      }
     }
+
     spawnFood();
     trash();
     person.display();
     burger.display();
+    displayTimer();
     burger.movement();
     collisionDetection();
     displayInventoryBar();
@@ -633,19 +624,17 @@ function gameLoop() {
     displayRequest();
     burgerPersonInteraction();
     displayPoints();
-  }
-  else if (state === "wrongFood"){
+  } else if (state === "wrongFood") {
     background(0);
     textSize(75);
     fill(255);
-    text("You lost bro, Pac Man is a picky eater.", width/2, 400);
-    text("At least you got " + points + " points", width/2, 500);
-  }
-  else {
+    text("You lost bro, Pac Man is a picky eater.", width / 2, 400);
+    text("At least you got " + points + " points", width / 2, 500);
+  } else {
     background(0);
     textSize(75);
     fill(255);
-    text("You ran out of time, Pac Man got really mad", width/2, 400);
-    text("At least you got " + points + " points", width/2, 500);
+    text("You ran out of time, Pac Man got really mad", width / 2, 400);
+    text("At least you got " + points + " points", width / 2, 500);
   }
 }
