@@ -67,7 +67,6 @@ function setup() {
   person = new Person(680, 630, 130, 130);
   person.randomBurgerRequest();
 
-
   foodWidth = 80;
   foodHeight = 80;
 
@@ -254,8 +253,9 @@ class Timer {
     fill(255, 178, 102);
     rect(trashX - 10, trashY - 250, trashSize + 7, trashSize, 25);
     fill(0);
+    textSize(22);
+    text("COUNTDOWN", this.textX - 2, this.textY - 40);
     textSize(28);
-    text("45 SECOND", this.textX - 2, this.textY - 40);
     text("TIMER:", this.textX, this.textY -10);
     textSize(75);
     text(abs(int(millis() / 1000 + tTime)), this.textX, this.textY + 50);
@@ -374,7 +374,7 @@ function burgerPersonInteraction() {
     addPointsAndReset();
   }
   else if (dist(burger.x, burger.y, person.x + 10, person.y) < 65) {
-    lose();
+    wrongFoodLose();
   }
 }
 
@@ -388,8 +388,8 @@ function addPointsAndReset() {
 }
 
 // if the request and the inventory do not match up, then you lose
-function lose() {
-  state = "gameOver";
+function wrongFoodLose() {
+  state = "wrongFood";
 }
 
 // function that creates an empty inventory bar
@@ -591,6 +591,7 @@ function displayRequest() {
 // checks if person request matches with the inventory
 function matchRequestWithInventory() {
   if (lettuceRequest === lettuceCount && tomatoRequest === tomatoCount && ketchupRequest === ketchupCount && cheeseRequest === cheeseCount && onionRequest === onionCount) {
+    person.randomBurgerRequest();
     return true;
   }
 }
@@ -633,11 +634,18 @@ function gameLoop() {
     burgerPersonInteraction();
     displayPoints();
   }
-  else {
+  else if (state === "wrongFood"){
     background(0);
     textSize(75);
     fill(255);
     text("You lost bro, Pac Man is a picky eater.", width/2, 400);
+    text("At least you got " + points + " points", width/2, 500);
+  }
+  else {
+    background(0);
+    textSize(75);
+    fill(255);
+    text("You ran out of time, Pac Man got really mad", width/2, 400);
     text("At least you got " + points + " points", width/2, 500);
   }
 }
