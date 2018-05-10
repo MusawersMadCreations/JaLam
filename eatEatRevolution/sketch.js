@@ -256,7 +256,7 @@ class Timer {
     text("45 SECOND", this.textX - 2, this.textY - 40);
     text("TIMER:", this.textX, this.textY -10);
     textSize(75);
-    text(int(millis() / 1000), this.textX, this.textY + 50);
+    text(int(millis() / 1000 - 4000), this.textX, this.textY + 50);
 
   }
 
