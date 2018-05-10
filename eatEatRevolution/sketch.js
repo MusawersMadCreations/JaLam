@@ -10,6 +10,7 @@ let burger, burgerImg;
 let person, personImg;
 let orderIsDone;
 let gameTimer;
+let tTime;
 
 let tableImg;
 
@@ -55,6 +56,7 @@ function setup() {
   state = "startScreen";
 
   gameTimer = new Timer(45000, width - 80, 220);
+  tTime = - 50;
 
   button = new Button("START", width / 2 - 175, height / 2 + 80, 320, 80, [51, 25, 0], [126, 74, 16], [255, 178, 102], 30, 160, 75);
 
@@ -256,13 +258,12 @@ class Timer {
     text("45 SECOND", this.textX - 2, this.textY - 40);
     text("TIMER:", this.textX, this.textY -10);
     textSize(75);
-    text(int(millis() / 1000 - 4000), this.textX, this.textY + 50);
+    text(abs(int(millis() / 1000 + tTime)), this.textX, this.textY + 50);
 
   }
 
   reset(newWaitTime) {
-    this.waitTime = newWaitTime;
-    this.startTime = millis();
+    this.startTime = millis() + 15000;
     this.finishTime = this.startTime + this.waitTime;
     this.timerIsDone = false;
   }
@@ -611,8 +612,9 @@ function gameLoop() {
       state = "game";
     }
   } else if (state === "game") {
-    image(tableImg, 0, 0, width, height);
-    gameTimer.display();
+      image(tableImg, 0, 0, width, height);
+      gameTimer.display();
+
     if (gameTimer.isDone()) {
       state = "gameOver";
       if (orderIsDone) { // WHEN GUY WHO ORDERS RECIEVES HIS ORDER
