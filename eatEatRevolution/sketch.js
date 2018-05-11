@@ -62,13 +62,13 @@ function preload() {
 
 // executes once after preload
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  createCanvas(1536, 759);
 
   state = "startScreen";
 
   button = new Button("START", width / 2 - 175, height / 2 + 80, 320, 80, [51, 25, 0], [126, 74, 16], [255, 178, 102], 30, 160, 75);
 
-  cellSize = windowHeight / 8;
+  cellSize = 759 / 8;
 
   burger = new Burger(width / 2, 100, 80, 80);
 
@@ -487,31 +487,31 @@ function alterInventoryBar() {
 // gives any food picked up a new location
 function newFoodLocations() {
   if (lettuceTaken === true) {
-    lettuce.x = random(125, windowWidth - 300);
+    lettuce.x = random(125, 1536 - 300);
     lettuce.y = random(60, 550);
     alterInventoryBar();
     lettuceTaken = false;
   }
   if (tomatoTaken === true) {
-    tomato.x = random(125, windowWidth - 300);
+    tomato.x = random(125, 1536 - 300);
     tomato.y = random(60, 550);
     alterInventoryBar();
     tomatoTaken = false;
   }
   if (cheeseTaken === true) {
-    cheese.x = random(125, windowWidth - 300);
+    cheese.x = random(125, 1536 - 300);
     cheese.y = random(60, 550);
     alterInventoryBar();
     cheeseTaken = false;
   }
   if (ketchupTaken === true) {
-    ketchup.x = random(125, windowWidth - 300);
+    ketchup.x = random(125, 1536 - 300);
     ketchup.y = random(60, 500);
     alterInventoryBar();
     ketchupTaken = false;
   }
   if (onionTaken === true) {
-    onion.x = random(125, windowWidth - 300);
+    onion.x = random(125, 1536 - 300);
     onion.y = random(60, 550);
     alterInventoryBar();
     onionTaken = false;
@@ -582,8 +582,8 @@ function matchRequestWithInventory() {
 // function that displays the points on the side
 function displayPoints() {
   textSize(32);
-  text("Points:", windowWidth - 100, 70);
-  text(points, windowWidth - 100, 100);
+  text("Points:", 1536 - 100, 70);
+  text(points, 1536 - 100, 100);
 }
 
 // function that runs the timer
